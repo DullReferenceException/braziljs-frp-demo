@@ -2,6 +2,7 @@ import kefir from 'kefir';
 import teams from './teams';
 import transform from '../../../../utils/transform';
 import {
+  disconnections,
   inboundMessages,
   addedPlayers,
   removedPlayers,
@@ -13,6 +14,7 @@ import {
 function Player(name, client) {
 
   const team = teamJoinings
+    .filter(e => e.player === name)
     .map(e => e.team)
     .toProperty(() => null);
 
@@ -20,7 +22,7 @@ function Player(name, client) {
     clicks.filter(e => e.player === name), score => score + 1,
     resets, () => 0);
 
-  return kefir
+  const playerStream = kefir
     .combine([team, score], (team, score) => {
       return {
         name: name,
@@ -30,14 +32,21 @@ function Player(name, client) {
       }
     })
     .toProperty();
+
+  disconnections
+    .filter(d => d === client)
+    .map(() => playerStream)
+    .plugInto(removedPlayers);
+
+  return playerStream;
 }
 
-const players = transform([],
+const playerStreams = transform([],
   addedPlayers, (players, player) => players.concat(player),
   removedPlayers, (players, player) => players.filter(p => p !== player)
 );
 
-const playersState = players
+const players = playerStreams
   .flatMap(ps => kefir.combine(ps))
   .map(players => players.map(p => ({
     name: p.name,
@@ -45,13 +54,13 @@ const playersState = players
     score: p.score
   })))
   .toProperty(() => [])
-  .log('Latest players');
+  .log('all players state');
 
 const namePattern = /^(.*?)(\d+)$/;
 
 inboundMessages
   .filter(e => e.message.type === 'join')
-  .combineLatest(playersState, (e, players) => {
+  .combineLatest(players, (e, players) => {
     let name = e.message.name;
     while (players.some(p => p.name === name)) {
       let match = namePattern.exec(name);
@@ -63,4 +72,4 @@ inboundMessages
   })
   .plugInto(addedPlayers);
 
-export default playersState;
+export default players;

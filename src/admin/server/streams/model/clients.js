@@ -7,7 +7,6 @@ class Client {
 
     this._myInboundMessages = kefir
       .fromEvents(socket, 'message')
-      .log('Got message over socket')
       .map(msg => ({
         client: this,
         message: JSON.parse(msg)
@@ -18,7 +17,7 @@ class Client {
 
     this._myDisconnects = kefir
       .fromEvents(socket, 'close')
-      .map(() => ({ client: this }));
+      .map(() => this);
 
     this._handleServerMessages = evt => socket.send(JSON.stringify(evt.message));
 

@@ -6,6 +6,7 @@ import '../../../../utils/kefir-extensions';
 import {
   outboundMessages,
   addedPlayers,
+  removedPlayers,
   teamJoinings,
   teamLeavings,
   clicks,
@@ -28,6 +29,7 @@ function Team(name) {
   );
 
   teamJoinings
+    .filter(evt => evt.team === name)
     .map(evt => ({
       client: evt.client,
       message: {
@@ -37,6 +39,15 @@ function Team(name) {
       }
     }))
     .plugInto(outboundMessages);
+
+  removedPlayers
+    .flatMap(p => p.take(1))
+    .filter(p => p.team === name)
+    .map(p => ({
+      player: p.name,
+      team: name
+    }))
+    .plugInto(teamLeavings);
 
   return kefir
     .combine([players, score], (players, score) => {
@@ -56,7 +67,6 @@ const teams = kefir
 addedPlayers
   .flatMap(p => p.take(1))
   .combineLatest(teams, (player, teams) => {
-    console.log('Team sizes: ' + teams.map(t => t.players.size));
     const emptiestTeam = teams
       .reduce((curr, team) => (curr && curr.players.size <= team.players.size) ? curr : team);
     return {
