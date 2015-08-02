@@ -3,7 +3,7 @@ import teams from './teams';
 import transform from '../../../../utils/transform';
 import {
   disconnections,
-  inboundMessages,
+  joinRequests,
   addedPlayers,
   removedPlayers,
   teamJoinings,
@@ -58,8 +58,7 @@ const players = playerStreams
 
 const namePattern = /^(.*?)(\d+)$/;
 
-inboundMessages
-  .filter(e => e.message.type === 'join')
+joinRequests
   .combineLatest(players, (e, players) => {
     let name = e.message.name;
     while (players.some(p => p.name === name)) {

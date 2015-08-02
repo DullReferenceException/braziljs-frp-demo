@@ -2,16 +2,18 @@ import kefir from 'kefir';
 import { gameStarts, gameStops } from '../events';
 import teams from './teams';
 import players from './players';
+import transform from '../../../../utils/transform'
 import '../../../../utils/kefir-extensions';
 
 gameStarts
-  .flatMap(() => kefir.later(20000, {}))
+  .flatMap(e => kefir.later((e.seconds || 20) * 1000, {}))
   .plugInto(gameStops);
 
 const isStarted = kefir
-  .merge(
+  .merge([
     gameStarts.map(() => true),
-    gameStops.map(() => false))
+    gameStops.map(() => false)
+  ])
   .toProperty(() => false);
 
 const gameState = kefir
@@ -21,6 +23,7 @@ const gameState = kefir
       players: players,
       teams: teams
     }
-  });
+  })
+  .toProperty();
 
 export default gameState;
