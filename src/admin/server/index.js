@@ -2,6 +2,9 @@ import Promise from 'bluebird';
 import { Server as WebSocketServer } from 'ws';
 import WebServer from './WebServer';
 import SocketServer from './WebSocketServer';
+import * as events from './streams/events';
+
+Object.keys(events).forEach(k => events[k].log(k));
 
 class AdminServer {
   constructor() {

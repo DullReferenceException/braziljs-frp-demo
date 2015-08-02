@@ -1,9 +1,9 @@
 import Promise from 'bluebird';
-import { Observable } from 'rx';
+import kefir from 'kefir';
 import { Server } from 'ws';
-import events from './events';
-import gameState from './stores/game';
-import clients from './stores/client';
+import gameState from './streams/model/gameState';
+import clients from './streams/model/clients';
+import { connections, outboundMessages } from './streams/events';
 
 export default class WebSocketServer {
   constructor(httpServer) {
@@ -13,20 +13,17 @@ export default class WebSocketServer {
   start() {
     var server = new Server({ server: this._httpServer });
 
-    Observable
-      .fromEvent(server, 'connection')
-      .subscribe(events.ofType('client.connect'));
+    kefir.fromEvents(server, 'connection').plugInto(connections);
 
     gameState
-      .throttleWithTimeout(100)
-      .map(state => {
-        return {
-          message: {
-            type: 'state',
-            state: state
-          }
+      .throttle(100)
+      .map(state => ({
+        client: null,
+        message: {
+          type: 'state',
+          state: state
         }
-      })
-      .multicast(events.ofType('server.message'));
+      }))
+      .plugInto(outboundMessages);
   }
 }
