@@ -20,5 +20,4 @@ export const gameStarts = inboundMessages
   .map(e => e.message);
 export const gameStops = kefir.pool();
 
-export const resets = kefir.pool();
 export const clicks = kefir.pool();

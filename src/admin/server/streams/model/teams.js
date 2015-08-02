@@ -9,8 +9,8 @@ import {
   removedPlayers,
   teamJoinings,
   teamLeavings,
-  clicks,
-  resets
+  gameStarts,
+  clicks
 } from '../events';
 
 function Team(name) {
@@ -20,12 +20,12 @@ function Team(name) {
     teamLeavings.filter(evt => evt.team === name), (ps, e) => ps.delete(e.player));
 
   const score = transform(0,
+    gameStarts, score => 0,
+
     clicks
       .combineLatest(players, (e, players) => players.contains(e.player))
       .filter(),
-    score => score + 1,
-
-    resets, score => 0
+    score => score + 1
   );
 
   teamJoinings

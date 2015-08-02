@@ -7,8 +7,8 @@ import {
   addedPlayers,
   removedPlayers,
   teamJoinings,
-  clicks,
-  resets
+  gameStarts,
+  clicks
 } from '../events';
 
 function Player(name, client) {
@@ -19,8 +19,8 @@ function Player(name, client) {
     .toProperty(() => null);
 
   const score = transform(0,
-    clicks.filter(e => e.player === name), score => score + 1,
-    resets, () => 0);
+    gameStarts, () => 0,
+    clicks.filter(e => e.player === name), score => score + 1);
 
   const playerStream = kefir
     .combine([team, score], (team, score) => {
