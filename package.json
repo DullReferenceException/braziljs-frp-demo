@@ -1,0 +1,19 @@
+{
+  "name": "tug-o-war",
+  "version": "0.0.0",
+  "description": "Admin site for tug of war",
+  "author": "jacob.h.page@gmail.com",
+  "license": "BSD-2-Clause",
+  "dependencies": {
+    "rx": "~2.5.3",
+    "ws": "~0.7.2",
+    "bluebird": "~2.9.34",
+    "express": "~4.13.2",
+    "immutable": "~3.7.4",
+    "babel": "~5.8.20",
+    "kefir": "~2.7.2"
+  },
+  "scripts": {
+    "start-admin": "node ./scripts/start-admin"
+  }
+}
