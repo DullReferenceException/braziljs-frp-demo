@@ -53,8 +53,7 @@ const players = playerStreams
     team: p.team,
     score: p.score
   })))
-  .toProperty(() => [])
-  .log('all players state');
+  .toProperty(() => []);
 
 const namePattern = /^(.*?)(\d+)$/;
 

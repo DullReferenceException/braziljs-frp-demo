@@ -9,7 +9,6 @@ kefir.Observable.prototype.plugInto = function (pool) {
   return this;
 };
 
-
 kefir.Observable.prototype.unplugFrom = function (pool) {
   pool.unplug(this);
   return this;

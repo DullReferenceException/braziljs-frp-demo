@@ -9,6 +9,8 @@ export default class WebServer {
 
     this.app.get('/', (req, res, next) => res.sendFile(path.resolve(__dirname, '../client/static/index.html')));
 
+    this.app.use(express.static(path.resolve(__dirname, '../client/static')));
+
     this.server = http.createServer(this.app);
   }
 
