@@ -1,4 +1,5 @@
 //import kefir from 'kefir';
+import cluster from 'cluster';
 import webServer from './web-server';
 //import outboundMessages from './messages/outbound';
 
@@ -9,4 +10,8 @@ import webServer from './web-server';
 //  );
 
 webServer
-  .onValue(() => console.log('User interface listening at http://localhost:8080/'));
+  .onValue(() => {
+    if (cluster.isMaster) {
+      console.log('User interface listening at http://localhost:8080/');
+    }
+  });
