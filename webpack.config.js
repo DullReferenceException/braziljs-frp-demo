@@ -1,7 +1,7 @@
 module.exports = {
-  entry: './src/admin/client/index.jsx',
-  output: {
-    filename: './src/admin/client/static/js/app.js'
+  entry: {
+    admin: './src/admin/client/index.jsx',
+    user: './src/user/client/index.jsx'
   },
   module: {
     loaders: [
@@ -17,5 +17,8 @@ module.exports = {
     resolve: {
       extensions: ['', '.js', '.jsx']
     }
+  },
+  output: {
+    filename: './src/[name]/client/static/js/app.js'
   }
 };
