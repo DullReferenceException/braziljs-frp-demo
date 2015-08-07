@@ -1,22 +1,12 @@
-import Promise from 'bluebird';
-import { Server as WebSocketServer } from 'ws';
-import WebServer from './WebServer';
-import SocketServer from './WebSocketServer';
-import * as events from './streams/events';
+import kefir from 'kefir';
+import webServer from './web-server';
+import outboundMessages from './messages/outbound';
 
-Object.keys(events).forEach(k => events[k].log(k));
+outboundMessages
+  .onValue(msg => kefir
+    .fromNodeCallback(cb => msg.client.send(JSON.stringify(msg.message), cb))
+    .onError(err => msg.client.close())
+  );
 
-class AdminServer {
-  constructor() {
-    this.webServer = new WebServer();
-    this.socketServer = new SocketServer(this.webServer.server);
-  }
-
-  start() {
-    return this.webServer
-      .start()
-      .then(() => this.socketServer.start());
-  }
-}
-
-export default new AdminServer();
+webServer
+  .onValue(() => console.log('Admin interface listening at http://localhost:8081/'));

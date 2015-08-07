@@ -1,4 +1,4 @@
-import inboundMessages from './inboundMessages';
+import inboundMessages from './index';
 
 const state = inboundMessages
   .filter(m => m.type === 'state')

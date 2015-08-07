@@ -20475,13 +20475,13 @@
 
 	var _utilsEventHandler2 = _interopRequireDefault(_utilsEventHandler);
 
-	var _streamsOutboundMessages = __webpack_require__(189);
+	var _messagesOutboundOutbound = __webpack_require__(238);
 
-	var _streamsOutboundMessages2 = _interopRequireDefault(_streamsOutboundMessages);
+	var _messagesOutboundOutbound2 = _interopRequireDefault(_messagesOutboundOutbound);
 
-	var _streamsState = __webpack_require__(231);
+	var _state = __webpack_require__(241);
 
-	var _streamsState2 = _interopRequireDefault(_streamsState);
+	var _state2 = _interopRequireDefault(_state);
 
 	__webpack_require__(219);
 
@@ -20504,7 +20504,7 @@
 	      }
 	    };
 
-	    _streamsState2['default'].onValue(function (m) {
+	    _state2['default'].onValue(function (m) {
 	      return _this.setState({ model: m });
 	    });
 
@@ -20519,7 +20519,7 @@
 	      return e.preventDefault();
 	    }).map(function () {
 	      return { type: 'start', seconds: _this.state.seconds };
-	    }).plugInto(_streamsOutboundMessages2['default']);
+	    }).plugInto(_messagesOutboundOutbound2['default']);
 	  }
 
 	  _createClass(AdminInterface, [{
@@ -26118,139 +26118,9 @@
 	;
 
 /***/ },
-/* 189 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var _slicedToArray = __webpack_require__(220)['default'];
-
-	var _interopRequireDefault = __webpack_require__(1)['default'];
-
-	Object.defineProperty(exports, '__esModule', {
-	  value: true
-	});
-
-	var _kefir = __webpack_require__(188);
-
-	var _kefir2 = _interopRequireDefault(_kefir);
-
-	var _sockets = __webpack_require__(190);
-
-	var _sockets2 = _interopRequireDefault(_sockets);
-
-	__webpack_require__(219);
-
-	var outboundMessages = _kefir2['default'].pool();
-
-	outboundMessages.combineLatest(_sockets2['default']).onValue(function (value) {
-	  var _value = _slicedToArray(value, 2);
-
-	  var msg = _value[0];
-	  var socket = _value[1];
-
-	  socket.send(JSON.stringify(msg));
-	});
-
-	exports['default'] = outboundMessages;
-	module.exports = exports['default'];
-
-/***/ },
-/* 190 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var _interopRequireDefault = __webpack_require__(1)['default'];
-
-	Object.defineProperty(exports, '__esModule', {
-	  value: true
-	});
-
-	var _kefir = __webpack_require__(188);
-
-	var _kefir2 = _interopRequireDefault(_kefir);
-
-	var _utilsTransform = __webpack_require__(191);
-
-	var _utilsTransform2 = _interopRequireDefault(_utilsTransform);
-
-	var sockets = _kefir2['default'].repeat(function () {
-	  return _kefir2['default'].stream(function (emitter) {
-	    var socket = new WebSocket('ws://' + location.host + '/');
-	    socket.onopen = function () {
-	      return emitter.emit(socket);
-	    };
-	    socket.onerror = function (err) {
-	      return emitter.error(err);
-	    };
-	    socket.onclose = function () {
-	      return emitter.end();
-	    };
-	    return function () {
-	      return socket.close();
-	    };
-	  });
-	}).toProperty();
-
-	exports['default'] = sockets;
-	module.exports = exports['default'];
-
-/***/ },
-/* 191 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var _toArray = __webpack_require__(192)['default'];
-
-	var _interopRequireDefault = __webpack_require__(1)['default'];
-
-	Object.defineProperty(exports, '__esModule', {
-	  value: true
-	});
-	exports['default'] = transform;
-
-	var _kefir = __webpack_require__(188);
-
-	var _kefir2 = _interopRequireDefault(_kefir);
-
-	function transform(initValue) {
-	  for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-	    args[_key - 1] = arguments[_key];
-	  }
-
-	  var value = initValue;
-	  var streams = [];
-
-	  var _loop = function () {
-	    var _args = args;
-
-	    var _args2 = _toArray(_args);
-
-	    var source = _args2[0];
-	    var calculateNewValue = _args2[1];
-
-	    var newArgs = _args2.slice(2);
-
-	    streams.push(source.map(function (v) {
-	      return value = calculateNewValue(value, v);
-	    }));
-	    args = newArgs;
-	  };
-
-	  while (args.length) {
-	    _loop();
-	  }
-
-	  return _kefir2['default'].merge(streams).toProperty(function () {
-	    return value;
-	  });
-	}
-
-	module.exports = exports['default'];
-
-/***/ },
+/* 189 */,
+/* 190 */,
+/* 191 */,
 /* 192 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -26849,32 +26719,63 @@
 	};
 
 /***/ },
-/* 231 */
+/* 231 */,
+/* 232 */,
+/* 233 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
+
+	var _toArray = __webpack_require__(192)['default'];
 
 	var _interopRequireDefault = __webpack_require__(1)['default'];
 
 	Object.defineProperty(exports, '__esModule', {
 	  value: true
 	});
+	exports['default'] = transform;
 
-	var _inboundMessages = __webpack_require__(232);
+	var _kefir = __webpack_require__(188);
 
-	var _inboundMessages2 = _interopRequireDefault(_inboundMessages);
+	var _kefir2 = _interopRequireDefault(_kefir);
 
-	var state = _inboundMessages2['default'].filter(function (m) {
-	  return m.type === 'state';
-	}).map(function (m) {
-	  return m.state;
-	});
+	function transform(initValue) {
+	  for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+	    args[_key - 1] = arguments[_key];
+	  }
 
-	exports['default'] = state;
+	  var value = initValue;
+	  var streams = [];
+
+	  var _loop = function () {
+	    var _args = args;
+
+	    var _args2 = _toArray(_args);
+
+	    var source = _args2[0];
+	    var calculateNewValue = _args2[1];
+
+	    var newArgs = _args2.slice(2);
+
+	    streams.push(source.map(function (v) {
+	      return value = calculateNewValue(value, v);
+	    }));
+	    args = newArgs;
+	  };
+
+	  while (args.length) {
+	    _loop();
+	  }
+
+	  return _kefir2['default'].merge(streams).toProperty(function () {
+	    return value;
+	  });
+	}
+
 	module.exports = exports['default'];
 
 /***/ },
-/* 232 */
+/* 234 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -26889,7 +26790,51 @@
 
 	var _kefir2 = _interopRequireDefault(_kefir);
 
-	var _sockets = __webpack_require__(190);
+	var _utilsDynamicValue = __webpack_require__(233);
+
+	var _utilsDynamicValue2 = _interopRequireDefault(_utilsDynamicValue);
+
+	var sockets = _kefir2['default'].repeat(function () {
+	  return _kefir2['default'].stream(function (emitter) {
+	    setTimeout(function () {
+	      var socket = new WebSocket('ws://' + location.host + '/');
+	      socket.onopen = function () {
+	        return emitter.emit(socket);
+	      };
+	      socket.onerror = function (err) {
+	        return emitter.error(err);
+	      };
+	      socket.onclose = function () {
+	        return emitter.end();
+	      };
+	      return function () {
+	        return socket.close();
+	      };
+	    }, 1000);
+	  }).endOnError();
+	}).toProperty();
+
+	exports['default'] = sockets;
+	module.exports = exports['default'];
+
+/***/ },
+/* 235 */,
+/* 236 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _interopRequireDefault = __webpack_require__(1)['default'];
+
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+
+	var _kefir = __webpack_require__(188);
+
+	var _kefir2 = _interopRequireDefault(_kefir);
+
+	var _sockets = __webpack_require__(234);
 
 	var _sockets2 = _interopRequireDefault(_sockets);
 
@@ -26902,6 +26847,107 @@
 	});
 
 	exports['default'] = inboundMessages;
+	module.exports = exports['default'];
+
+/***/ },
+/* 237 */,
+/* 238 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _slicedToArray = __webpack_require__(220)['default'];
+
+	var _interopRequireDefault = __webpack_require__(1)['default'];
+
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+
+	var _kefir = __webpack_require__(188);
+
+	var _kefir2 = _interopRequireDefault(_kefir);
+
+	var _sockets = __webpack_require__(234);
+
+	var _sockets2 = _interopRequireDefault(_sockets);
+
+	__webpack_require__(219);
+
+	var outboundMessages = _kefir2['default'].pool();
+
+	outboundMessages.combineLatest(_sockets2['default']).onValue(function (_ref) {
+	  var _ref2 = _slicedToArray(_ref, 2);
+
+	  var msg = _ref2[0];
+	  var socket = _ref2[1];
+	  return socket.send(JSON.stringify(msg));
+	});
+
+	exports['default'] = outboundMessages;
+	module.exports = exports['default'];
+
+/***/ },
+/* 239 */,
+/* 240 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _interopRequireDefault = __webpack_require__(1)['default'];
+
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+
+	var _index = __webpack_require__(236);
+
+	var _index2 = _interopRequireDefault(_index);
+
+	var state = _index2['default'].filter(function (m) {
+	  return m.type === 'state';
+	}).map(function (m) {
+	  return m.state;
+	});
+
+	exports['default'] = state;
+	module.exports = exports['default'];
+
+/***/ },
+/* 241 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _interopRequireDefault = __webpack_require__(1)['default'];
+
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+
+	var _messagesInboundState = __webpack_require__(240);
+
+	var _messagesInboundState2 = _interopRequireDefault(_messagesInboundState);
+
+	var state = _messagesInboundState2['default'].map(function (state) {
+	  var teams = {
+	    Red: { name: 'Red', score: 0, players: [] },
+	    Blue: { name: 'Blue', score: 0, players: [] }
+	  };
+
+	  state.players.forEach(function (player) {
+	    var team = teams[player.team];
+	    team.players.push(player);
+	    team.score += player.score;
+	  });
+
+	  return {
+	    isStarted: state.isStarted,
+	    teams: [teams.Red, teams.Blue]
+	  };
+	});
+
+	exports['default'] = state;
 	module.exports = exports['default'];
 
 /***/ }

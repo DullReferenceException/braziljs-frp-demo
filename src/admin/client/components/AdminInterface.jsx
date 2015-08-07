@@ -1,7 +1,7 @@
 import React from 'react';
 import EventHandler from '../../../utils/EventHandler';
-import outboundMessages from '../streams/outboundMessages';
-import state from '../streams/state';
+import outboundMessages from '../messages/outbound/outbound';
+import state from '../state';
 import '../../../utils/kefir-extensions';
 
 export default class AdminInterface extends React.Component {
