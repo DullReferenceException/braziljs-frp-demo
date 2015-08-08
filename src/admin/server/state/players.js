@@ -1,6 +1,7 @@
 import kefir from 'kefir';
 import server from '../server';
-import joinRequests from '../messages/inbound/joins';
+import joinRequests from '../messages/inbound/joinings';
+import leaveRequests from '../messages/inbound/leavings';
 import Player from '../models/player';
 import dynamicValue from '../../../common/utils/dynamic-value';
 
@@ -29,6 +30,7 @@ const players = dynamicValue([],
     const newPlayer = new Player(req.client, message.id, name, team);
     return players.concat(newPlayer);
   },
+  leaveRequests, (players, req) => players.filter(p => p.id !== req.player),
   disconnections, (players, socket) => players.filter(p => p.client !== socket)
 );
 

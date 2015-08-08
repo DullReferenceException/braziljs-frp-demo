@@ -1,7 +1,7 @@
 module.exports = {
   entry: {
     admin: './src/admin/client/index.jsx',
-    user: './src/user/client/index.jsx'
+    player: './src/player/client/index.jsx'
   },
   module: {
     loaders: [

@@ -11,7 +11,7 @@ export default class Player{
 
     const score = dynamicValue(0,
       gameStarts, () => 0,
-      clicks.filter(e => e.player === name), score => score + 1);
+      clicks.filter(e => e.player === id), score => score + 1);
 
     this.stream = score
       .map(score => {

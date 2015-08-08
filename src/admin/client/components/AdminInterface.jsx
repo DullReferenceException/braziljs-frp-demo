@@ -10,12 +10,12 @@ export default class AdminInterface extends React.Component {
     this.state = {
       seconds: 20
     };
+
+    this.changeSeconds = new EventHandler();
+    this.start = new EventHandler();
   }
 
   componentDidMount() {
-    this.changeSeconds = new EventHandler();
-    this.start = new EventHandler();
-
     this.changeSeconds
       .stream()
       .onValue(e => this.setState({seconds: parseInt(e.target.value, 10)}));
@@ -23,7 +23,7 @@ export default class AdminInterface extends React.Component {
     this.start
       .stream()
       .onValue(e => e.preventDefault())
-      .map(() => ({type: 'start', seconds: this.state.seconds}))
+      .map(() => ({ type: 'start' }))
       .plugInto(outboundMessages);
   }
 
