@@ -1,5 +1,5 @@
 import kefir from 'kefir';
-import transform from '../../utils/dynamicValue';
+import transform from '../../common/utils/dynamic-value';
 
 const sockets = kefir
   .repeat(() => kefir

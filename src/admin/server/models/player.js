@@ -1,6 +1,6 @@
 import gameStarts from '../messages/inbound/starts';
 import clicks from '../messages/inbound/clicks';
-import dynamicValue from '../../../utils/dynamicValue';
+import dynamicValue from '../../../common/utils/dynamic-value';
 
 export default class Player{
   constructor(client, id, name, team) {

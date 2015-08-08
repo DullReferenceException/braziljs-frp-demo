@@ -1,11 +1,12 @@
 import kefir from 'kefir';
-import isStarted from './is-started';
+import statuses from './game-status';
 import players from './players';
 
 export default kefir
-  .combine([isStarted, players], (isStarted, players) => {
+  .combine([statuses, players], (statusInfo, players) => {
     return {
-      isStarted: isStarted,
+      status: statusInfo.status,
+      countdown: statusInfo.countdown,
       players: players
     }
   })

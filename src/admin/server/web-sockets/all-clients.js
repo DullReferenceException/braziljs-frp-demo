@@ -1,5 +1,5 @@
 import kefir from 'kefir';
-import dynamicValue from '../../../utils/dynamicValue';
+import dynamicValue from '../../../common/utils/dynamic-value';
 import connections from './connections';
 import disconnections from './disconnections';
 

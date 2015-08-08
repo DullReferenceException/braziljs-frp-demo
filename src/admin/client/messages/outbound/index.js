@@ -1,6 +1,6 @@
 import kefir from 'kefir';
 import sockets from './../../sockets';
-import '../../../../utils/kefir-extensions';
+import '../../../../common/utils/kefir-extensions';
 
 const outboundMessages = kefir.pool();
 

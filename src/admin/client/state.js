@@ -14,9 +14,11 @@ const state = stateMessages
     });
 
     return {
-      isStarted: state.isStarted,
+      status: state.status,
+      countdown: state.countdown,
       teams: [teams.Red, teams.Blue]
     }
-  });
+  })
+  .toProperty(() => ({ status: 'stopped', teams: [] }));
 
 export default state;

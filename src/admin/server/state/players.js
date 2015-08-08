@@ -2,7 +2,7 @@ import kefir from 'kefir';
 import disconnections from '../web-sockets/disconnections';
 import joinRequests from '../messages/inbound/joins';
 import Player from '../models/player';
-import dynamicValue from '../../../utils/dynamicValue';
+import dynamicValue from '../../../common/utils/dynamic-value';
 
 const namePattern = /^(.*?)(\d+)$/;
 

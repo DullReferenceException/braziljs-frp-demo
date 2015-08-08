@@ -1,35 +1,29 @@
 import React from 'react';
-import EventHandler from '../../../utils/EventHandler';
-import outboundMessages from '../messages/outbound/outbound';
-import state from '../state';
-import '../../../utils/kefir-extensions';
+import EventHandler from '../../../common/utils/event-handler';
+import outboundMessages from '../messages/outbound';
+import '../../../common/utils/kefir-extensions';
 
 export default class AdminInterface extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      seconds: 20,
-      isStarting: false,
-      model: {
-        isStarted: false,
-        teams: []
-      }
+      seconds: 20
     };
+  }
 
-    state.onValue(m => this.setState({ model: m }));
-
+  componentDidMount() {
     this.changeSeconds = new EventHandler();
     this.start = new EventHandler();
 
     this.changeSeconds
       .stream()
-      .onValue(e => this.setState({ seconds: parseInt(e.target.value, 10) }));
+      .onValue(e => this.setState({seconds: parseInt(e.target.value, 10)}));
 
     this.start
       .stream()
       .onValue(e => e.preventDefault())
-      .map(() => ({ type: 'start', seconds: this.state.seconds }))
+      .map(() => ({type: 'start', seconds: this.state.seconds}))
       .plugInto(outboundMessages);
   }
 
@@ -37,24 +31,54 @@ export default class AdminInterface extends React.Component {
     return (
       <div id="main">
         <h1>Click Wars</h1>
+        { this.props.status && this['render_' + this.props.status]() }
+      </div>
+    );
+  }
 
-        {
-          !this.state.model.isStarted
-            ? <form id="start-parameters" onSubmit={this.start}>
-                <label>Seconds</label>
-                <input type="numeric" value={this.state.seconds} onChange={this.changeSeconds}/>
-                <input type="submit" value="Start"/>
-              </form>
-            : <div>Started!</div>
-        }
+  render_stopped() {
+    return (
+      <form id="start-parameters" onSubmit={this.start}>
+        <h2>Game Settings</h2>
 
-        <h2>Players</h2>
+        <label>Seconds</label>
+        <input type="numeric" value={this.state.seconds} onChange={this.changeSeconds}/>
+        <input type="submit" value="Start"/>
+      </form>
+    );
+  }
 
+  render_waiting() {
+    return (
+      <div>
+        <h2>Next game in {this.state.seconds} seconds...</h2>
+
+        <h3># Players Joined</h3>
         <dl>
           {
-            this.state.model.teams.map(t => [
+            this.props.teams.map(t => [
               <dt>Team { t.name }</dt>,
               <dd>{ t.players.length }</dd>
+            ])
+          }
+        </dl>
+      </div>
+    );
+  }
+
+  render_starting() {
+    return <h2>Starting in {this.props.countdown} seconds...</h2>;
+  }
+
+  render_started() {
+    return (
+      <div>
+        <h2>Go!</h2>
+        <dl>
+          {
+            this.props.teams.map(t => [
+              <dt>{ t.name }</dt>,
+              <dd>{ t.score }</dd>
             ])
           }
         </dl>

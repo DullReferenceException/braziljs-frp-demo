@@ -52,11 +52,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _componentsAdminInterfaceJsx = __webpack_require__(158);
+	var _componentsAdminStateJsx = __webpack_require__(234);
 
-	var _componentsAdminInterfaceJsx2 = _interopRequireDefault(_componentsAdminInterfaceJsx);
+	var _componentsAdminStateJsx2 = _interopRequireDefault(_componentsAdminStateJsx);
 
-	_react2['default'].render(_react2['default'].createElement(_componentsAdminInterfaceJsx2['default'], null), document.body);
+	_react2['default'].render(_react2['default'].createElement(_componentsAdminStateJsx2['default'], null), document.body);
 
 /***/ },
 /* 1 */
@@ -20471,58 +20471,48 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _utilsEventHandler = __webpack_require__(187);
+	var _commonUtilsEventHandler = __webpack_require__(239);
 
-	var _utilsEventHandler2 = _interopRequireDefault(_utilsEventHandler);
+	var _commonUtilsEventHandler2 = _interopRequireDefault(_commonUtilsEventHandler);
 
-	var _messagesOutboundOutbound = __webpack_require__(189);
+	var _messagesOutbound = __webpack_require__(240);
 
-	var _messagesOutboundOutbound2 = _interopRequireDefault(_messagesOutboundOutbound);
+	var _messagesOutbound2 = _interopRequireDefault(_messagesOutbound);
 
-	var _state = __webpack_require__(231);
-
-	var _state2 = _interopRequireDefault(_state);
-
-	__webpack_require__(230);
+	__webpack_require__(237);
 
 	var AdminInterface = (function (_React$Component) {
 	  _inherits(AdminInterface, _React$Component);
 
 	  function AdminInterface(props) {
-	    var _this = this;
-
 	    _classCallCheck(this, AdminInterface);
 
 	    _get(Object.getPrototypeOf(AdminInterface.prototype), 'constructor', this).call(this, props);
 
 	    this.state = {
-	      seconds: 20,
-	      isStarting: false,
-	      model: {
-	        isStarted: false,
-	        teams: []
-	      }
+	      seconds: 20
 	    };
-
-	    _state2['default'].onValue(function (m) {
-	      return _this.setState({ model: m });
-	    });
-
-	    this.changeSeconds = new _utilsEventHandler2['default']();
-	    this.start = new _utilsEventHandler2['default']();
-
-	    this.changeSeconds.stream().onValue(function (e) {
-	      return _this.setState({ seconds: parseInt(e.target.value, 10) });
-	    });
-
-	    this.start.stream().onValue(function (e) {
-	      return e.preventDefault();
-	    }).map(function () {
-	      return { type: 'start', seconds: _this.state.seconds };
-	    }).plugInto(_messagesOutboundOutbound2['default']);
 	  }
 
 	  _createClass(AdminInterface, [{
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      var _this = this;
+
+	      this.changeSeconds = new _commonUtilsEventHandler2['default']();
+	      this.start = new _commonUtilsEventHandler2['default']();
+
+	      this.changeSeconds.stream().onValue(function (e) {
+	        return _this.setState({ seconds: parseInt(e.target.value, 10) });
+	      });
+
+	      this.start.stream().onValue(function (e) {
+	        return e.preventDefault();
+	      }).map(function () {
+	        return { type: 'start', seconds: _this.state.seconds };
+	      }).plugInto(_messagesOutbound2['default']);
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
 	      return _react2['default'].createElement(
@@ -20533,30 +20523,51 @@
 	          null,
 	          'Click Wars'
 	        ),
-	        !this.state.model.isStarted ? _react2['default'].createElement(
-	          'form',
-	          { id: 'start-parameters', onSubmit: this.start },
-	          _react2['default'].createElement(
-	            'label',
-	            null,
-	            'Seconds'
-	          ),
-	          _react2['default'].createElement('input', { type: 'numeric', value: this.state.seconds, onChange: this.changeSeconds }),
-	          _react2['default'].createElement('input', { type: 'submit', value: 'Start' })
-	        ) : _react2['default'].createElement(
-	          'div',
-	          null,
-	          'Started!'
-	        ),
+	        this.props.status && this['render_' + this.props.status]()
+	      );
+	    }
+	  }, {
+	    key: 'render_stopped',
+	    value: function render_stopped() {
+	      return _react2['default'].createElement(
+	        'form',
+	        { id: 'start-parameters', onSubmit: this.start },
 	        _react2['default'].createElement(
 	          'h2',
 	          null,
-	          'Players'
+	          'Game Settings'
+	        ),
+	        _react2['default'].createElement(
+	          'label',
+	          null,
+	          'Seconds'
+	        ),
+	        _react2['default'].createElement('input', { type: 'numeric', value: this.state.seconds, onChange: this.changeSeconds }),
+	        _react2['default'].createElement('input', { type: 'submit', value: 'Start' })
+	      );
+	    }
+	  }, {
+	    key: 'render_waiting',
+	    value: function render_waiting() {
+	      return _react2['default'].createElement(
+	        'div',
+	        null,
+	        _react2['default'].createElement(
+	          'h2',
+	          null,
+	          'Next game in ',
+	          this.state.seconds,
+	          ' seconds...'
+	        ),
+	        _react2['default'].createElement(
+	          'h3',
+	          null,
+	          '# Players Joined'
 	        ),
 	        _react2['default'].createElement(
 	          'dl',
 	          null,
-	          this.state.model.teams.map(function (t) {
+	          this.props.teams.map(function (t) {
 	            return [_react2['default'].createElement(
 	              'dt',
 	              null,
@@ -20566,6 +20577,45 @@
 	              'dd',
 	              null,
 	              t.players.length
+	            )];
+	          })
+	        )
+	      );
+	    }
+	  }, {
+	    key: 'render_starting',
+	    value: function render_starting() {
+	      return _react2['default'].createElement(
+	        'h2',
+	        null,
+	        'Starting in ',
+	        this.props.countdown,
+	        ' seconds...'
+	      );
+	    }
+	  }, {
+	    key: 'render_started',
+	    value: function render_started() {
+	      return _react2['default'].createElement(
+	        'div',
+	        null,
+	        _react2['default'].createElement(
+	          'h2',
+	          null,
+	          'Go!'
+	        ),
+	        _react2['default'].createElement(
+	          'dl',
+	          null,
+	          this.props.teams.map(function (t) {
+	            return [_react2['default'].createElement(
+	              'dt',
+	              null,
+	              t.name
+	            ), _react2['default'].createElement(
+	              'dd',
+	              null,
+	              t.score
 	            )];
 	          })
 	        )
@@ -21042,40 +21092,7 @@
 	exports.__esModule = true;
 
 /***/ },
-/* 187 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var _interopRequireDefault = __webpack_require__(1)['default'];
-
-	Object.defineProperty(exports, '__esModule', {
-	  value: true
-	});
-	exports['default'] = EventHandler;
-
-	var _kefir = __webpack_require__(188);
-
-	var _kefir2 = _interopRequireDefault(_kefir);
-
-	function EventHandler() {
-	  var theEmitter = null;
-	  var theStream = _kefir2['default'].stream(function (emitter) {
-	    theEmitter = emitter;
-	  });
-
-	  var theCallback = function theCallback(e) {
-	    theEmitter && theEmitter.emit(e);
-	  };
-	  theCallback.stream = function () {
-	    return theStream;
-	  };
-	  return theCallback;
-	}
-
-	module.exports = exports['default'];
-
-/***/ },
+/* 187 */,
 /* 188 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -26118,43 +26135,7 @@
 	;
 
 /***/ },
-/* 189 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var _slicedToArray = __webpack_require__(190)['default'];
-
-	var _interopRequireDefault = __webpack_require__(1)['default'];
-
-	Object.defineProperty(exports, '__esModule', {
-	  value: true
-	});
-
-	var _kefir = __webpack_require__(188);
-
-	var _kefir2 = _interopRequireDefault(_kefir);
-
-	var _sockets = __webpack_require__(220);
-
-	var _sockets2 = _interopRequireDefault(_sockets);
-
-	__webpack_require__(230);
-
-	var outboundMessages = _kefir2['default'].pool();
-
-	outboundMessages.combineLatest(_sockets2['default']).onValue(function (_ref) {
-	  var _ref2 = _slicedToArray(_ref, 2);
-
-	  var msg = _ref2[0];
-	  var socket = _ref2[1];
-	  return socket.send(JSON.stringify(msg));
-	});
-
-	exports['default'] = outboundMessages;
-	module.exports = exports['default'];
-
-/***/ },
+/* 189 */,
 /* 190 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -26614,9 +26595,9 @@
 
 	var _kefir2 = _interopRequireDefault(_kefir);
 
-	var _utilsDynamicValue = __webpack_require__(221);
+	var _commonUtilsDynamicValue = __webpack_require__(238);
 
-	var _utilsDynamicValue2 = _interopRequireDefault(_utilsDynamicValue);
+	var _commonUtilsDynamicValue2 = _interopRequireDefault(_commonUtilsDynamicValue);
 
 	var sockets = _kefir2['default'].repeat(function () {
 	  return _kefir2['default'].stream(function (emitter) {
@@ -26642,60 +26623,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 221 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var _toArray = __webpack_require__(222)['default'];
-
-	var _interopRequireDefault = __webpack_require__(1)['default'];
-
-	Object.defineProperty(exports, '__esModule', {
-	  value: true
-	});
-	exports['default'] = transform;
-
-	var _kefir = __webpack_require__(188);
-
-	var _kefir2 = _interopRequireDefault(_kefir);
-
-	function transform(initValue) {
-	  for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-	    args[_key - 1] = arguments[_key];
-	  }
-
-	  var value = initValue;
-	  var streams = [];
-
-	  var _loop = function () {
-	    var _args = args;
-
-	    var _args2 = _toArray(_args);
-
-	    var source = _args2[0];
-	    var calculateNewValue = _args2[1];
-
-	    var newArgs = _args2.slice(2);
-
-	    streams.push(source.map(function (v) {
-	      return value = calculateNewValue(value, v);
-	    }));
-	    args = newArgs;
-	  };
-
-	  while (args.length) {
-	    _loop();
-	  }
-
-	  return _kefir2['default'].merge(streams).toProperty(function () {
-	    return value;
-	  });
-	}
-
-	module.exports = exports['default'];
-
-/***/ },
+/* 221 */,
 /* 222 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -26824,32 +26752,7 @@
 	};
 
 /***/ },
-/* 230 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var _interopRequireDefault = __webpack_require__(1)['default'];
-
-	var _kefir = __webpack_require__(188);
-
-	var _kefir2 = _interopRequireDefault(_kefir);
-
-	_kefir2['default'].Observable.prototype.combineLatest = function (other, combinator) {
-	  return _kefir2['default'].combine([this], [other], combinator);
-	};
-
-	_kefir2['default'].Observable.prototype.plugInto = function (pool) {
-	  pool.plug(this);
-	  return this;
-	};
-
-	_kefir2['default'].Observable.prototype.unplugFrom = function (pool) {
-	  pool.unplug(this);
-	  return this;
-	};
-
-/***/ },
+/* 230 */,
 /* 231 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -26878,9 +26781,12 @@
 	  });
 
 	  return {
-	    isStarted: state.isStarted,
+	    status: state.status,
+	    countdown: state.countdown,
 	    teams: [teams.Red, teams.Blue]
 	  };
+	}).toProperty(function () {
+	  return { status: 'stopped', teams: [] };
 	});
 
 	exports['default'] = state;
@@ -26940,6 +26846,222 @@
 	});
 
 	exports['default'] = inboundMessages;
+	module.exports = exports['default'];
+
+/***/ },
+/* 234 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _get = __webpack_require__(159)['default'];
+
+	var _inherits = __webpack_require__(173)['default'];
+
+	var _createClass = __webpack_require__(183)['default'];
+
+	var _classCallCheck = __webpack_require__(186)['default'];
+
+	var _interopRequireDefault = __webpack_require__(1)['default'];
+
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _AdminInterfaceJsx = __webpack_require__(158);
+
+	var _AdminInterfaceJsx2 = _interopRequireDefault(_AdminInterfaceJsx);
+
+	var _state = __webpack_require__(231);
+
+	var _state2 = _interopRequireDefault(_state);
+
+	var AdminState = (function (_React$Component) {
+	  _inherits(AdminState, _React$Component);
+
+	  function AdminState(props) {
+	    _classCallCheck(this, AdminState);
+
+	    _get(Object.getPrototypeOf(AdminState.prototype), 'constructor', this).call(this, props);
+	  }
+
+	  _createClass(AdminState, [{
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      var _this = this;
+
+	      _state2['default'].onValue(function (s) {
+	        return _this.setState(s);
+	      });
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      return _react2['default'].createElement(_AdminInterfaceJsx2['default'], this.state);
+	    }
+	  }]);
+
+	  return AdminState;
+	})(_react2['default'].Component);
+
+	exports['default'] = AdminState;
+	module.exports = exports['default'];
+
+/***/ },
+/* 235 */,
+/* 236 */,
+/* 237 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _interopRequireDefault = __webpack_require__(1)['default'];
+
+	var _kefir = __webpack_require__(188);
+
+	var _kefir2 = _interopRequireDefault(_kefir);
+
+	_kefir2['default'].Observable.prototype.combineLatest = function (other, combinator) {
+	  return _kefir2['default'].combine([this], [other], combinator);
+	};
+
+	_kefir2['default'].Observable.prototype.plugInto = function (pool) {
+	  pool.plug(this);
+	  return this;
+	};
+
+	_kefir2['default'].Observable.prototype.unplugFrom = function (pool) {
+	  pool.unplug(this);
+	  return this;
+	};
+
+/***/ },
+/* 238 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _toArray = __webpack_require__(222)['default'];
+
+	var _interopRequireDefault = __webpack_require__(1)['default'];
+
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+	exports['default'] = transform;
+
+	var _kefir = __webpack_require__(188);
+
+	var _kefir2 = _interopRequireDefault(_kefir);
+
+	function transform(initValue) {
+	  for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+	    args[_key - 1] = arguments[_key];
+	  }
+
+	  var value = initValue;
+	  var streams = [];
+
+	  var _loop = function () {
+	    var _args = args;
+
+	    var _args2 = _toArray(_args);
+
+	    var source = _args2[0];
+	    var calculateNewValue = _args2[1];
+
+	    var newArgs = _args2.slice(2);
+
+	    streams.push(source.map(function (v) {
+	      return value = calculateNewValue(value, v);
+	    }));
+	    args = newArgs;
+	  };
+
+	  while (args.length) {
+	    _loop();
+	  }
+
+	  return _kefir2['default'].merge(streams).toProperty(function () {
+	    return value;
+	  });
+	}
+
+	module.exports = exports['default'];
+
+/***/ },
+/* 239 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _interopRequireDefault = __webpack_require__(1)['default'];
+
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+	exports['default'] = EventHandler;
+
+	var _kefir = __webpack_require__(188);
+
+	var _kefir2 = _interopRequireDefault(_kefir);
+
+	function EventHandler() {
+	  var theEmitter = null;
+	  var theStream = _kefir2['default'].stream(function (emitter) {
+	    theEmitter = emitter;
+	  });
+
+	  var theCallback = function theCallback(e) {
+	    theEmitter && theEmitter.emit(e);
+	  };
+	  theCallback.stream = function () {
+	    return theStream;
+	  };
+	  return theCallback;
+	}
+
+	module.exports = exports['default'];
+
+/***/ },
+/* 240 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _slicedToArray = __webpack_require__(190)['default'];
+
+	var _interopRequireDefault = __webpack_require__(1)['default'];
+
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+
+	var _kefir = __webpack_require__(188);
+
+	var _kefir2 = _interopRequireDefault(_kefir);
+
+	var _sockets = __webpack_require__(220);
+
+	var _sockets2 = _interopRequireDefault(_sockets);
+
+	__webpack_require__(237);
+
+	var outboundMessages = _kefir2['default'].pool();
+
+	outboundMessages.combineLatest(_sockets2['default']).onValue(function (_ref) {
+	  var _ref2 = _slicedToArray(_ref, 2);
+
+	  var msg = _ref2[0];
+	  var socket = _ref2[1];
+	  return socket.send(JSON.stringify(msg));
+	});
+
+	exports['default'] = outboundMessages;
 	module.exports = exports['default'];
 
 /***/ }

@@ -50,7 +50,7 @@
 
 	var _react = __webpack_require__(2);
 
-	//import AdminInterface from './components/AdminInterface.jsx';
+	//import AdminState from './components/AdminState.jsx';
 
 	var _react2 = _interopRequireDefault(_react);
 
