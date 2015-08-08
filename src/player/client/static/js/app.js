@@ -26785,28 +26785,71 @@
 	    key: 'renderGame',
 	    value: function renderGame() {
 	      return _react2['default'].createElement(
-	        'dl',
+	        'div',
 	        null,
 	        _react2['default'].createElement(
-	          'dt',
+	          'dl',
 	          null,
-	          'Joined as'
+	          _react2['default'].createElement(
+	            'dt',
+	            null,
+	            'Joined as'
+	          ),
+	          _react2['default'].createElement(
+	            'dd',
+	            null,
+	            this.props.name
+	          ),
+	          _react2['default'].createElement(
+	            'dt',
+	            null,
+	            'Team'
+	          ),
+	          _react2['default'].createElement(
+	            'dd',
+	            null,
+	            this.props.team
+	          )
 	        ),
-	        _react2['default'].createElement(
-	          'dd',
-	          null,
-	          this.props.name
-	        ),
-	        _react2['default'].createElement(
-	          'dt',
-	          null,
-	          'Team'
-	        ),
-	        _react2['default'].createElement(
-	          'dd',
-	          null,
-	          this.props.team
-	        )
+	        this.props.gameStatus === 'waiting' ? this.renderWaitingState() : this.props.gameStatus === 'starting' ? this.renderStartingState() : this.props.gameStatus === 'started' ? this.renderStartedState() : this.renderStoppedState()
+	      );
+	    }
+	  }, {
+	    key: 'renderStoppedState',
+	    value: function renderStoppedState() {
+	      return _react2['default'].createElement(
+	        'div',
+	        null,
+	        'Sorry, the game is not running at this time.'
+	      );
+	    }
+	  }, {
+	    key: 'renderWaitingState',
+	    value: function renderWaitingState() {
+	      return _react2['default'].createElement(
+	        'div',
+	        null,
+	        'Waiting for players to join...'
+	      );
+	    }
+	  }, {
+	    key: 'renderStartingState',
+	    value: function renderStartingState() {
+	      return _react2['default'].createElement(
+	        'div',
+	        null,
+	        'Starting in ',
+	        this.props.countdown,
+	        ' seconds...'
+	      );
+	    }
+	  }, {
+	    key: 'renderStartedState',
+	    value: function renderStartedState() {
+	      return _react2['default'].createElement(
+	        'div',
+	        null,
+	        'Started!'
 	      );
 	    }
 	  }]);

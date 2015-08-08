@@ -53,13 +53,37 @@ export default class UserInterface extends React.Component {
 
   renderGame() {
     return (
-      <dl>
-        <dt>Joined as</dt>
-        <dd>{ this.props.name }</dd>
+      <div>
+        <dl>
+          <dt>Joined as</dt>
+          <dd>{ this.props.name }</dd>
 
-        <dt>Team</dt>
-        <dd>{ this.props.team }</dd>
-      </dl>
+          <dt>Team</dt>
+          <dd>{ this.props.team }</dd>
+        </dl>
+        {
+            (this.props.gameStatus === 'waiting' )  ? this.renderWaitingState()
+          : (this.props.gameStatus === 'starting')  ? this.renderStartingState()
+          : (this.props.gameStatus === 'started' )  ? this.renderStartedState()
+                                                    : this.renderStoppedState()
+        }
+      </div>
     );
+  }
+
+  renderStoppedState() {
+    return <div>Sorry, the game is not running at this time.</div>
+  }
+
+  renderWaitingState() {
+    return <div>Waiting for players to join...</div>
+  }
+
+  renderStartingState() {
+    return <div>Starting in {this.props.countdown} seconds...</div>
+  }
+
+  renderStartedState() {
+    return <div>Started!</div>
   }
 }
