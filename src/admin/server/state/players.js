@@ -1,5 +1,5 @@
 import kefir from 'kefir';
-import disconnections from '../web-sockets/disconnections';
+import server from '../server';
 import joinRequests from '../messages/inbound/joins';
 import Player from '../models/player';
 import dynamicValue from '../../../common/utils/dynamic-value';
@@ -15,6 +15,8 @@ function getUniqueName(name, players) {
   }
   return name;
 }
+
+const disconnections = server.disconnections;
 
 const players = dynamicValue([],
   joinRequests, (players, req) => {

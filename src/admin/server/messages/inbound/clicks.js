@@ -1,4 +1,4 @@
-import inboundMessages from './index';
+import inboundMessages from './all';
 import status from '../../state/game-status';
 
 export default inboundMessages

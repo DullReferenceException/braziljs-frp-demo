@@ -1,4 +1,4 @@
-import inboundMessages from './index';
+import inboundMessages from './all';
 
 export default inboundMessages
   .filter(e => e.message.type === 'join');

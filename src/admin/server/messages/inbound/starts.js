@@ -1,4 +1,4 @@
-import messages from './index';
+import messages from './all';
 
 export default messages
   .filter(e => e.message.type === 'start')

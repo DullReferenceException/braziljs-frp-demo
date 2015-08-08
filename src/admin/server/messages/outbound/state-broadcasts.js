@@ -1,6 +1,6 @@
 import kefir from 'kefir';
+import { allClients } from '../../server';
 import state from '../../state';
-import allClients from '../../web-sockets/all-clients';
 
 export default kefir
   .combine([state.throttle(100)], [allClients])
