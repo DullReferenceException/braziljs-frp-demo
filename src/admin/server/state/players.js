@@ -35,8 +35,8 @@ const players = dynamicValue([],
 );
 
 const playerState = players
-  .flatMap(players => players.length
-    ? kefir.zip(players.map(p => p.stream))
+  .flatMapLatest(players => players.length
+    ? kefir.combine(players.map(p => p.stream))
     : kefir.constant([]))
   .toProperty(() => []);
 

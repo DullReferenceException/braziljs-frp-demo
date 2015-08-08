@@ -1,4 +1,4 @@
-import gameStarts from '../messages/inbound/starts';
+import gameStatus from '../state/game-status';
 import clicks from '../messages/inbound/clicks';
 import dynamicValue from '../../../common/utils/dynamic-value';
 
@@ -10,8 +10,9 @@ export default class Player{
     this.team = team;
 
     const score = dynamicValue(0,
-      gameStarts, () => 0,
-      clicks.filter(e => e.player === id), score => score + 1);
+      gameStatus.filter(s => s.status === 'starting'), () => 0,
+      clicks.filter(e => e.player === id), score => score + 1
+    );
 
     this.stream = score
       .map(score => {

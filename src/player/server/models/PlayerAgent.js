@@ -49,7 +49,7 @@ export default class PlayerAgent {
 
   handleMessagesFromStateServer() {
     this.playerState = gameState.map(state => {
-      const player = state.players[this.id];
+      const player = state.players[this.id] || null;
       return {
         id: this.id,
         name: player && player.name,

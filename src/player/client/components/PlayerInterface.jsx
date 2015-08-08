@@ -1,31 +1,28 @@
 import React from 'react';
-import EventHandler from '../../../common/utils/event-handler';
-import { messages } from '../socket-client';
-import '../../../common/utils/kefir-extensions';
+import dispatcher from '../dispatcher';
 
 export default class UserInterface extends React.Component {
   constructor(props) {
     super(props);
-
     this.state = {};
-
-    this.start = new EventHandler();
-    this.changeName = new EventHandler();
   }
 
-  componentDidMount() {
-    this.start
-      .stream()
-      .onValue(e => e.preventDefault())
-      .map(() => ({
-        type: 'join',
-        name: this.state.name
-      }))
-      .plugInto(messages.outbound);
+  get join() {
+    return e => {
+      e.preventDefault();
+      dispatcher.emit('join', { name: this.state.name });
+    }
+  }
 
-    this.changeName
-      .stream()
-      .onValue(e => this.setState({ name: e.target.value }));
+  get changeName() {
+    return e => this.setState({ name: e.target.value });
+  }
+
+  get click() {
+    return e => {
+      e.preventDefault();
+      dispatcher.emit('click', {});
+    }
   }
 
   render() {
@@ -43,7 +40,7 @@ export default class UserInterface extends React.Component {
 
   renderJoinForm() {
     return (
-      <form onSubmit={this.start}>
+      <form onSubmit={this.join}>
         <label>Your name</label>
         <input type="text" size="20" value={this.state.name} onInput={this.changeName}/>
         <input type="submit" value="Join"/>
@@ -72,18 +69,30 @@ export default class UserInterface extends React.Component {
   }
 
   renderStoppedState() {
-    return <div>Sorry, the game is not running at this time.</div>
+    return <h2>Sorry, the game is not running at this time.</h2>
   }
 
   renderWaitingState() {
-    return <div>Waiting for players to join...</div>
+    return <h2>Waiting for players to join. Game starts in {this.props.countdown} seconds...</h2>
   }
 
   renderStartingState() {
-    return <div>Starting in {this.props.countdown} seconds...</div>
+    return <h2>Starting in {this.props.countdown} seconds...</h2>
   }
 
   renderStartedState() {
-    return <div>Started!</div>
+    return (
+      <div>
+        <h2>Started!</h2>
+        <button className={this.props.team} onClick={this.click}>Click</button>
+
+        <dl>
+          <dt style={{ color: 'red' }}>Red</dt>
+          <dd>{this.props.teams.Red.score}</dd>
+          <dt style={{ color: 'blue' }}>Blue</dt>
+          <dd>{this.props.teams.Blue.score}</dd>
+        </dl>
+      </div>
+    );
   }
 }
