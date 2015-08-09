@@ -1,4 +1,6 @@
 import React from 'react';
+import Scoreboard from '../../../common/components/Scoreboard.jsx';
+import Winner from '../../../common/components/Winner.jsx';
 import dispatcher from '../dispatcher';
 
 export default class UserInterface extends React.Component {
@@ -20,9 +22,12 @@ export default class UserInterface extends React.Component {
 
   get click() {
     return e => {
-      e.preventDefault();
       dispatcher.emit('click', {});
     }
+  }
+
+  get disableDoubleTap() {
+    return e => e.preventDefault();
   }
 
   render() {
@@ -73,7 +78,16 @@ export default class UserInterface extends React.Component {
   }
 
   renderWaitingState() {
-    return <h2>Waiting for players to join. Game starts in {this.props.countdown} seconds...</h2>
+    var redScore = this.props.teams.Red.score;
+    var blueScore = this.props.teams.Blue.score;
+    return (
+      <div>
+        <Winner red={redScore} blue={blueScore}/>
+        <Scoreboard red={redScore} blue={blueScore}/>
+
+        <p>Next game in {this.props.countdown} seconds...</p>
+      </div>
+    );
   }
 
   renderStartingState() {
@@ -84,14 +98,16 @@ export default class UserInterface extends React.Component {
     return (
       <div>
         <h2>Started!</h2>
-        <button className={this.props.team} onClick={this.click}>Click</button>
 
-        <dl>
-          <dt style={{ color: 'red' }}>Red</dt>
-          <dd>{this.props.teams.Red.score}</dd>
-          <dt style={{ color: 'blue' }}>Blue</dt>
-          <dd>{this.props.teams.Blue.score}</dd>
-        </dl>
+        <Scoreboard
+          red={this.props.teams.Red.score}
+          blue={this.props.teams.Blue.score}/>
+
+        <button
+          className={this.props.team}
+          onMouseDown={this.click}>
+          Click
+        </button>
       </div>
     );
   }

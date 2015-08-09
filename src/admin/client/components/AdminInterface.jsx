@@ -1,4 +1,6 @@
 import React from 'react';
+import Scoreboard from '../../../common/components/Scoreboard.jsx';
+import Winner from '../../../common/components/Winner.jsx';
 import dispatcher from '../dispatcher';
 import '../../../common/utils/kefir-extensions';
 
@@ -44,19 +46,14 @@ export default class AdminInterface extends React.Component {
   }
 
   render_waiting() {
+    var red = this.props.teams[0].score;
+    var blue = this.props.teams[1].score;
     return (
       <div>
-        <h2>Next game in {this.state.seconds} seconds...</h2>
+        <Winner red={red} blue={blue}/>
+        <Scoreboard red={red} blue={blue}/>
 
-        <h3># Players Joined</h3>
-        <dl>
-          {
-            this.props.teams.map(t => [
-              <dt>Team { t.name }</dt>,
-              <dd>{ t.players.length }</dd>
-            ])
-          }
-        </dl>
+        <p>Next game in {this.props.countdown} seconds...</p>
       </div>
     );
   }
@@ -66,17 +63,11 @@ export default class AdminInterface extends React.Component {
   }
 
   render_started() {
+    var red = this.props.teams[0].score;
+    var blue = this.props.teams[1].score;
     return (
       <div>
-        <h2>Go!</h2>
-        <dl>
-          {
-            this.props.teams.map(t => [
-              <dt>{ t.name }</dt>,
-              <dd>{ t.score }</dd>
-            ])
-          }
-        </dl>
+        <Scoreboard red={red} blue={blue}/>
       </div>
     );
   }

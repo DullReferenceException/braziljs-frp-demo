@@ -20996,6 +20996,14 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _commonComponentsScoreboardJsx = __webpack_require__(236);
+
+	var _commonComponentsScoreboardJsx2 = _interopRequireDefault(_commonComponentsScoreboardJsx);
+
+	var _commonComponentsWinnerJsx = __webpack_require__(237);
+
+	var _commonComponentsWinnerJsx2 = _interopRequireDefault(_commonComponentsWinnerJsx);
+
 	var _dispatcher = __webpack_require__(188);
 
 	var _dispatcher2 = _interopRequireDefault(_dispatcher);
@@ -21052,36 +21060,19 @@
 	  }, {
 	    key: 'render_waiting',
 	    value: function render_waiting() {
+	      var red = this.props.teams[0].score;
+	      var blue = this.props.teams[1].score;
 	      return _react2['default'].createElement(
 	        'div',
 	        null,
+	        _react2['default'].createElement(_commonComponentsWinnerJsx2['default'], { red: red, blue: blue }),
+	        _react2['default'].createElement(_commonComponentsScoreboardJsx2['default'], { red: red, blue: blue }),
 	        _react2['default'].createElement(
-	          'h2',
+	          'p',
 	          null,
 	          'Next game in ',
-	          this.state.seconds,
+	          this.props.countdown,
 	          ' seconds...'
-	        ),
-	        _react2['default'].createElement(
-	          'h3',
-	          null,
-	          '# Players Joined'
-	        ),
-	        _react2['default'].createElement(
-	          'dl',
-	          null,
-	          this.props.teams.map(function (t) {
-	            return [_react2['default'].createElement(
-	              'dt',
-	              null,
-	              'Team ',
-	              t.name
-	            ), _react2['default'].createElement(
-	              'dd',
-	              null,
-	              t.players.length
-	            )];
-	          })
 	        )
 	      );
 	    }
@@ -21099,29 +21090,12 @@
 	  }, {
 	    key: 'render_started',
 	    value: function render_started() {
+	      var red = this.props.teams[0].score;
+	      var blue = this.props.teams[1].score;
 	      return _react2['default'].createElement(
 	        'div',
 	        null,
-	        _react2['default'].createElement(
-	          'h2',
-	          null,
-	          'Go!'
-	        ),
-	        _react2['default'].createElement(
-	          'dl',
-	          null,
-	          this.props.teams.map(function (t) {
-	            return [_react2['default'].createElement(
-	              'dt',
-	              null,
-	              t.name
-	            ), _react2['default'].createElement(
-	              'dd',
-	              null,
-	              t.score
-	            )];
-	          })
-	        )
+	        _react2['default'].createElement(_commonComponentsScoreboardJsx2['default'], { red: red, blue: blue })
 	      );
 	    }
 	  }, {
@@ -27165,6 +27139,135 @@
 	exports['default'] = _kefir2['default'].fromEvents(_dispatcher2['default'], 'start').map(function (e) {
 	  return { type: 'start' };
 	});
+	module.exports = exports['default'];
+
+/***/ },
+/* 227 */,
+/* 228 */,
+/* 229 */,
+/* 230 */,
+/* 231 */,
+/* 232 */,
+/* 233 */,
+/* 234 */,
+/* 235 */,
+/* 236 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	var _get = __webpack_require__(159)["default"];
+
+	var _inherits = __webpack_require__(173)["default"];
+
+	var _createClass = __webpack_require__(183)["default"];
+
+	var _classCallCheck = __webpack_require__(186)["default"];
+
+	var _interopRequireDefault = __webpack_require__(1)["default"];
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var Scoreboard = (function (_React$Component) {
+	  _inherits(Scoreboard, _React$Component);
+
+	  function Scoreboard(props) {
+	    _classCallCheck(this, Scoreboard);
+
+	    _get(Object.getPrototypeOf(Scoreboard.prototype), "constructor", this).call(this, props);
+	  }
+
+	  _createClass(Scoreboard, [{
+	    key: "render",
+	    value: function render() {
+	      return _react2["default"].createElement(
+	        "div",
+	        { className: "scores" },
+	        _react2["default"].createElement(
+	          "h3",
+	          null,
+	          "Score"
+	        ),
+	        _react2["default"].createElement(
+	          "div",
+	          { className: "score red" },
+	          this.props.red
+	        ),
+	        _react2["default"].createElement(
+	          "div",
+	          { className: "score blue" },
+	          this.props.blue
+	        )
+	      );
+	    }
+	  }]);
+
+	  return Scoreboard;
+	})(_react2["default"].Component);
+
+	exports["default"] = Scoreboard;
+	module.exports = exports["default"];
+
+/***/ },
+/* 237 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _get = __webpack_require__(159)['default'];
+
+	var _inherits = __webpack_require__(173)['default'];
+
+	var _createClass = __webpack_require__(183)['default'];
+
+	var _classCallCheck = __webpack_require__(186)['default'];
+
+	var _interopRequireDefault = __webpack_require__(1)['default'];
+
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var Winner = (function (_React$Component) {
+	  _inherits(Winner, _React$Component);
+
+	  function Winner(props) {
+	    _classCallCheck(this, Winner);
+
+	    _get(Object.getPrototypeOf(Winner.prototype), 'constructor', this).call(this, props);
+	  }
+
+	  _createClass(Winner, [{
+	    key: 'render',
+	    value: function render() {
+	      var winner = this.props.red === this.props.blue ? 'Tie' : this.props.red < this.props.blue ? 'Blue' : 'Red';
+	      return _react2['default'].createElement(
+	        'h3',
+	        { className: 'winner' },
+	        'Winner: ',
+	        _react2['default'].createElement(
+	          'span',
+	          { className: 'winner ' + winner },
+	          winner
+	        )
+	      );
+	    }
+	  }]);
+
+	  return Winner;
+	})(_react2['default'].Component);
+
+	exports['default'] = Winner;
 	module.exports = exports['default'];
 
 /***/ }

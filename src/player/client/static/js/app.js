@@ -56,6 +56,7 @@
 
 	var _componentsPlayerStateJsx2 = _interopRequireDefault(_componentsPlayerStateJsx);
 
+	_react2['default'].initializeTouchEvents(true);
 	_react2['default'].render(_react2['default'].createElement(_componentsPlayerStateJsx2['default'], null), document.body);
 
 /***/ },
@@ -27038,6 +27039,14 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _commonComponentsScoreboardJsx = __webpack_require__(236);
+
+	var _commonComponentsScoreboardJsx2 = _interopRequireDefault(_commonComponentsScoreboardJsx);
+
+	var _commonComponentsWinnerJsx = __webpack_require__(237);
+
+	var _commonComponentsWinnerJsx2 = _interopRequireDefault(_commonComponentsWinnerJsx);
+
 	var _dispatcher = __webpack_require__(232);
 
 	var _dispatcher2 = _interopRequireDefault(_dispatcher);
@@ -27126,12 +27135,20 @@
 	  }, {
 	    key: 'renderWaitingState',
 	    value: function renderWaitingState() {
+	      var redScore = this.props.teams.Red.score;
+	      var blueScore = this.props.teams.Blue.score;
 	      return _react2['default'].createElement(
-	        'h2',
+	        'div',
 	        null,
-	        'Waiting for players to join. Game starts in ',
-	        this.props.countdown,
-	        ' seconds...'
+	        _react2['default'].createElement(_commonComponentsWinnerJsx2['default'], { red: redScore, blue: blueScore }),
+	        _react2['default'].createElement(_commonComponentsScoreboardJsx2['default'], { red: redScore, blue: blueScore }),
+	        _react2['default'].createElement(
+	          'p',
+	          null,
+	          'Next game in ',
+	          this.props.countdown,
+	          ' seconds...'
+	        )
 	      );
 	    }
 	  }, {
@@ -27156,34 +27173,15 @@
 	          null,
 	          'Started!'
 	        ),
+	        _react2['default'].createElement(_commonComponentsScoreboardJsx2['default'], {
+	          red: this.props.teams.Red.score,
+	          blue: this.props.teams.Blue.score }),
 	        _react2['default'].createElement(
 	          'button',
-	          { className: this.props.team, onClick: this.click },
+	          {
+	            className: this.props.team,
+	            onMouseDown: this.click },
 	          'Click'
-	        ),
-	        _react2['default'].createElement(
-	          'dl',
-	          null,
-	          _react2['default'].createElement(
-	            'dt',
-	            { style: { color: 'red' } },
-	            'Red'
-	          ),
-	          _react2['default'].createElement(
-	            'dd',
-	            null,
-	            this.props.teams.Red.score
-	          ),
-	          _react2['default'].createElement(
-	            'dt',
-	            { style: { color: 'blue' } },
-	            'Blue'
-	          ),
-	          _react2['default'].createElement(
-	            'dd',
-	            null,
-	            this.props.teams.Blue.score
-	          )
 	        )
 	      );
 	    }
@@ -27210,8 +27208,14 @@
 	    key: 'click',
 	    get: function get() {
 	      return function (e) {
-	        e.preventDefault();
 	        _dispatcher2['default'].emit('click', {});
+	      };
+	    }
+	  }, {
+	    key: 'disableDoubleTap',
+	    get: function get() {
+	      return function (e) {
+	        return e.preventDefault();
 	      };
 	    }
 	  }]);
@@ -27220,6 +27224,126 @@
 	})(_react2['default'].Component);
 
 	exports['default'] = UserInterface;
+	module.exports = exports['default'];
+
+/***/ },
+/* 236 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	var _get = __webpack_require__(159)["default"];
+
+	var _inherits = __webpack_require__(173)["default"];
+
+	var _createClass = __webpack_require__(183)["default"];
+
+	var _classCallCheck = __webpack_require__(186)["default"];
+
+	var _interopRequireDefault = __webpack_require__(1)["default"];
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var Scoreboard = (function (_React$Component) {
+	  _inherits(Scoreboard, _React$Component);
+
+	  function Scoreboard(props) {
+	    _classCallCheck(this, Scoreboard);
+
+	    _get(Object.getPrototypeOf(Scoreboard.prototype), "constructor", this).call(this, props);
+	  }
+
+	  _createClass(Scoreboard, [{
+	    key: "render",
+	    value: function render() {
+	      return _react2["default"].createElement(
+	        "div",
+	        { className: "scores" },
+	        _react2["default"].createElement(
+	          "h3",
+	          null,
+	          "Score"
+	        ),
+	        _react2["default"].createElement(
+	          "div",
+	          { className: "score red" },
+	          this.props.red
+	        ),
+	        _react2["default"].createElement(
+	          "div",
+	          { className: "score blue" },
+	          this.props.blue
+	        )
+	      );
+	    }
+	  }]);
+
+	  return Scoreboard;
+	})(_react2["default"].Component);
+
+	exports["default"] = Scoreboard;
+	module.exports = exports["default"];
+
+/***/ },
+/* 237 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _get = __webpack_require__(159)['default'];
+
+	var _inherits = __webpack_require__(173)['default'];
+
+	var _createClass = __webpack_require__(183)['default'];
+
+	var _classCallCheck = __webpack_require__(186)['default'];
+
+	var _interopRequireDefault = __webpack_require__(1)['default'];
+
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var Winner = (function (_React$Component) {
+	  _inherits(Winner, _React$Component);
+
+	  function Winner(props) {
+	    _classCallCheck(this, Winner);
+
+	    _get(Object.getPrototypeOf(Winner.prototype), 'constructor', this).call(this, props);
+	  }
+
+	  _createClass(Winner, [{
+	    key: 'render',
+	    value: function render() {
+	      var winner = this.props.red === this.props.blue ? 'Tie' : this.props.red < this.props.blue ? 'Blue' : 'Red';
+	      return _react2['default'].createElement(
+	        'h3',
+	        { className: 'winner' },
+	        'Winner: ',
+	        _react2['default'].createElement(
+	          'span',
+	          { className: 'winner ' + winner },
+	          winner
+	        )
+	      );
+	    }
+	  }]);
+
+	  return Winner;
+	})(_react2['default'].Component);
+
+	exports['default'] = Winner;
 	module.exports = exports['default'];
 
 /***/ }

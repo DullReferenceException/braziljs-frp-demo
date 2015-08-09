@@ -1,0 +1,47 @@
+body {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+h3 {
+    text-align: center;
+}
+
+.scores {
+    font-size: 5vmax;
+    margin: 3vmax;
+    box-shadow: 10px 10px 10px rgba(0,0,0,0.3);
+    border: 1px solid silver;
+}
+
+.scores h3 {
+    border-bottom: 1px solid silver;
+    margin: 0;
+    text-align: center;
+}
+
+.score {
+    display: inline-block;
+    width: 50%;
+    text-align: center;
+}
+
+.score.red {
+    color: red;
+}
+
+.score.blue {
+    color: blue;
+}
+
+.winner {
+    font-size: 8vh;
+    font-size: 8vmax;
+}
+
+.winner.Red {
+    color: red;
+}
+
+.winner.Blue {
+    color: blue;
+}
