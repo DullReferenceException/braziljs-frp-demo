@@ -21004,6 +21004,10 @@
 
 	var _commonComponentsWinnerJsx2 = _interopRequireDefault(_commonComponentsWinnerJsx);
 
+	var _commonComponentsCountdownJsx = __webpack_require__(239);
+
+	var _commonComponentsCountdownJsx2 = _interopRequireDefault(_commonComponentsCountdownJsx);
+
 	var _dispatcher = __webpack_require__(188);
 
 	var _dispatcher2 = _interopRequireDefault(_dispatcher);
@@ -21070,9 +21074,9 @@
 	        _react2['default'].createElement(
 	          'p',
 	          null,
-	          'Next game in ',
-	          this.props.countdown,
-	          ' seconds...'
+	          'Next game in',
+	          _react2['default'].createElement(_commonComponentsCountdownJsx2['default'], { timestamp: this.props.countdown }),
+	          'seconds...'
 	        )
 	      );
 	    }
@@ -21082,9 +21086,9 @@
 	      return _react2['default'].createElement(
 	        'h2',
 	        null,
-	        'Starting in ',
-	        this.props.countdown,
-	        ' seconds...'
+	        'Starting in',
+	        _react2['default'].createElement(_commonComponentsCountdownJsx2['default'], { timestamp: this.props.countdown }),
+	        'seconds...'
 	      );
 	    }
 	  }, {
@@ -26519,17 +26523,30 @@
 
 	'use strict';
 
+	var _slicedToArray = __webpack_require__(196)['default'];
+
 	var _interopRequireDefault = __webpack_require__(1)['default'];
 
 	Object.defineProperty(exports, '__esModule', {
 	  value: true
 	});
 
+	var _kefir = __webpack_require__(191);
+
+	var _kefir2 = _interopRequireDefault(_kefir);
+
 	var _messagesInboundState = __webpack_require__(193);
 
 	var _messagesInboundState2 = _interopRequireDefault(_messagesInboundState);
 
-	var state = _messagesInboundState2['default'].map(function (state) {
+	var _socketClient = __webpack_require__(194);
+
+	var state = _kefir2['default'].combine([_messagesInboundState2['default']], [_socketClient.timeDrift]).map(function (_ref) {
+	  var _ref2 = _slicedToArray(_ref, 2);
+
+	  var state = _ref2[0];
+	  var drift = _ref2[1];
+
 	  var teams = {
 	    Red: { name: 'Red', score: 0, players: [] },
 	    Blue: { name: 'Blue', score: 0, players: [] }
@@ -26543,7 +26560,7 @@
 
 	  return {
 	    status: state.status,
-	    countdown: state.countdown,
+	    countdown: state.countdown - drift,
 	    teams: [teams.Red, teams.Blue]
 	  };
 	}).toProperty(function () {
@@ -26559,13 +26576,17 @@
 
 	'use strict';
 
+	var _interopRequireDefault = __webpack_require__(1)['default'];
+
 	Object.defineProperty(exports, '__esModule', {
 	  value: true
 	});
 
-	var _socketClient = __webpack_require__(194);
+	var _all = __webpack_require__(238);
 
-	exports['default'] = _socketClient.messages.inbound.filter(function (m) {
+	var _all2 = _interopRequireDefault(_all);
+
+	exports['default'] = _all2['default'].filter(function (m) {
 	  return m.type === 'state';
 	}).map(function (m) {
 	  return m.state;
@@ -26651,6 +26672,16 @@
 	    return JSON.parse(e.data);
 	  });
 
+	  var drift = inboundMessages.scan(function (accum, msg) {
+	    var diff = Date.now() - msg.timestamp;
+	    return {
+	      sum: accum.sum + diff,
+	      count: accum.count + 1
+	    };
+	  }, { sum: 0, count: 0 }).map(function (accum) {
+	    return accum.count ? accum.sum / accum.count : 0;
+	  }).toProperty();
+
 	  var outboundMessages = _kefir2['default'].pool();
 
 	  _kefir2['default'].combine([outboundMessages], [sockets]).onValue(function (_ref2) {
@@ -26663,6 +26694,7 @@
 	  });
 
 	  return {
+	    timeDrift: drift,
 	    messages: {
 	      inbound: inboundMessages,
 	      outbound: outboundMessages
@@ -27268,6 +27300,81 @@
 	})(_react2['default'].Component);
 
 	exports['default'] = Winner;
+	module.exports = exports['default'];
+
+/***/ },
+/* 238 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+
+	var _socketClient = __webpack_require__(194);
+
+	exports['default'] = _socketClient.messages.inbound;
+	module.exports = exports['default'];
+
+/***/ },
+/* 239 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _get = __webpack_require__(159)['default'];
+
+	var _inherits = __webpack_require__(173)['default'];
+
+	var _createClass = __webpack_require__(183)['default'];
+
+	var _classCallCheck = __webpack_require__(186)['default'];
+
+	var _interopRequireDefault = __webpack_require__(1)['default'];
+
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var Countdown = (function (_React$Component) {
+	  _inherits(Countdown, _React$Component);
+
+	  function Countdown(props) {
+	    _classCallCheck(this, Countdown);
+
+	    _get(Object.getPrototypeOf(Countdown.prototype), 'constructor', this).call(this, props);
+	  }
+
+	  _createClass(Countdown, [{
+	    key: 'render',
+	    value: function render() {
+	      var _this = this;
+
+	      var remaining = this.props.timestamp - Date.now();
+	      var seconds = Math.max(Math.ceil(remaining / 1000), 0);
+	      var opacity = seconds ? remaining % 1000 / 1000 : 1.0;
+	      requestAnimationFrame(function () {
+	        return _this.forceUpdate();
+	      });
+	      return _react2['default'].createElement(
+	        'span',
+	        { style: { opacity: opacity } },
+	        ' ',
+	        seconds,
+	        ' '
+	      );
+	    }
+	  }]);
+
+	  return Countdown;
+	})(_react2['default'].Component);
+
+	exports['default'] = Countdown;
 	module.exports = exports['default'];
 
 /***/ }

@@ -1,6 +1,7 @@
 import React from 'react';
 import Scoreboard from '../../../common/components/Scoreboard.jsx';
 import Winner from '../../../common/components/Winner.jsx';
+import Countdown from '../../../common/components/Countdown.jsx';
 import dispatcher from '../dispatcher';
 
 export default class UserInterface extends React.Component {
@@ -85,13 +86,23 @@ export default class UserInterface extends React.Component {
         <Winner red={redScore} blue={blueScore}/>
         <Scoreboard red={redScore} blue={blueScore}/>
 
-        <p>Next game in {this.props.countdown} seconds...</p>
+        <p>
+          Next game in
+          <Countdown timestamp={this.props.countdown}/>
+          seconds...
+        </p>
       </div>
     );
   }
 
   renderStartingState() {
-    return <h2>Starting in {this.props.countdown} seconds...</h2>
+    return (
+      <h2>
+        Starting in
+        <Countdown timestamp={this.props.countdown}/>
+        seconds...
+      </h2>
+    )
   }
 
   renderStartedState() {

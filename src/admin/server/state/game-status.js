@@ -12,12 +12,16 @@ const timerConfigs = starts
 function timerEvent(trigger, newStatus, duration) {
   return kefir
     .combine([trigger], [timerConfigs])
-    .flatMap(([prevEvent, cfg]) => kefir.later(
-      (prevEvent.countdown || 0) * 1000,
-      {
-        status: newStatus,
-        countdown: cfg[duration]
-      }));
+    .flatMap(([prevEvent, cfg]) =>
+      kefir.stream(emitter =>
+        setTimeout(() => {
+          emitter.emit({
+            status: newStatus,
+            countdown: Date.now() + ((cfg[duration] || 0) * 1000)
+          });
+        }, prevEvent.countdown ? (prevEvent.countdown - Date.now()) : 0)
+      )
+    );
 }
 
 const startingEvents = kefir.pool();

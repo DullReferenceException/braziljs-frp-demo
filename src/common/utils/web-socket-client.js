@@ -23,6 +23,17 @@ export default function createSocketClient({ url, impl }) {
     .flatMapLatest(s => kefir.stream(emitter => s.onmessage = emitter.emit))
     .map(e => JSON.parse(e.data));
 
+  const drift = inboundMessages
+    .scan((accum, msg) => {
+      var diff = Date.now() - msg.timestamp;
+      return {
+        sum: accum.sum + diff,
+        count: accum.count + 1
+      }
+    }, { sum: 0, count: 0 })
+    .map(accum => accum.count ? accum.sum / accum.count : 0)
+    .toProperty();
+
   const outboundMessages = kefir.pool();
 
   kefir
@@ -32,6 +43,7 @@ export default function createSocketClient({ url, impl }) {
     });
 
   return {
+    timeDrift: drift,
     messages: {
       inbound: inboundMessages,
       outbound: outboundMessages

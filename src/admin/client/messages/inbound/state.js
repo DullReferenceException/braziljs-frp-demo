@@ -1,6 +1,5 @@
-import { messages } from '../../socket-client';
+import inboundMessages from './all';
 
-export default messages
-  .inbound
+export default inboundMessages
   .filter(m => m.type === 'state')
   .map(m => m.state);

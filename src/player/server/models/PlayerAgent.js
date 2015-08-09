@@ -64,6 +64,7 @@ export default class PlayerAgent {
 
   sendMessagesToPlayer() {
     this.playerOutboundMessageHandler = msg => {
+      msg.timestamp = Date.now();
       kefir
         .fromNodeCallback(cb => this.socket.send(JSON.stringify(msg), cb))
         .onError(err => this.socket.close())

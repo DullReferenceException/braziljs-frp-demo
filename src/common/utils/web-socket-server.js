@@ -24,7 +24,10 @@ export default function createServer(webServer) {
 
   outboundMessages
     .onValue(msg => kefir
-      .fromNodeCallback(cb => msg.client.send(JSON.stringify(msg.message), cb))
+      .fromNodeCallback(cb => {
+        msg.message.timestamp = Date.now();
+        msg.client.send(JSON.stringify(msg.message), cb)
+      })
       .onError(err => msg.client.close())
   );
 

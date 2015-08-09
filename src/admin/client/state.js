@@ -1,7 +1,10 @@
+import kefir from 'kefir';
 import stateMessages from './messages/inbound/state';
+import { timeDrift } from './socket-client';
 
-const state = stateMessages
-  .map(state => {
+const state = kefir
+  .combine([stateMessages], [timeDrift])
+  .map(([state, drift]) => {
     let teams = {
       Red: { name: 'Red', score: 0, players: [] },
       Blue: { name: 'Blue', score: 0, players: [] }
@@ -15,7 +18,7 @@ const state = stateMessages
 
     return {
       status: state.status,
-      countdown: state.countdown,
+      countdown: state.countdown - drift,
       teams: [teams.Red, teams.Blue]
     }
   })

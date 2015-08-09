@@ -1,6 +1,7 @@
 import React from 'react';
 import Scoreboard from '../../../common/components/Scoreboard.jsx';
 import Winner from '../../../common/components/Winner.jsx';
+import Countdown from '../../../common/components/Countdown.jsx';
 import dispatcher from '../dispatcher';
 import '../../../common/utils/kefir-extensions';
 
@@ -53,13 +54,23 @@ export default class AdminInterface extends React.Component {
         <Winner red={red} blue={blue}/>
         <Scoreboard red={red} blue={blue}/>
 
-        <p>Next game in {this.props.countdown} seconds...</p>
+        <p>
+          Next game in
+          <Countdown timestamp={this.props.countdown}/>
+          seconds...
+        </p>
       </div>
     );
   }
 
   render_starting() {
-    return <h2>Starting in {this.props.countdown} seconds...</h2>;
+    return (
+      <h2>
+        Starting in
+        <Countdown timestamp={this.props.countdown}/>
+        seconds...
+      </h2>
+    );
   }
 
   render_started() {
