@@ -1,7 +1,10 @@
 body {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    margin: 3vh;
-    margin: 3vmax;
+    margin: 0;
+}
+
+#content {
+    margin: 1em;
 }
 
 h3 {
@@ -28,11 +31,29 @@ input[type="text"] {
     height: 5vmax;
     font-size: 4vh;
     font-size: 4vmax;
+    margin: 0.5em 0;
 }
 
 input[type="submit"] {
     width: 100%;
+    font-size: 4vh;
+    font-size: 4vmax;
     text-align: center;
+}
+
+.countdown {
+    font-size: 2vh;
+    font-size: 2vmax;
+    background-color: #7f1f7f;
+    color: white;
+    position: relative;
+    padding: 0.5em 1em;
+}
+
+.countdown .seconds {
+    position: absolute;
+    right: 1em;
+    top: 0.5em;
 }
 
 .scores {

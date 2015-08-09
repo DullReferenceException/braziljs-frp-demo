@@ -32,45 +32,29 @@ export default class UserInterface extends React.Component {
   }
 
   render() {
-    return (
-      <div>
-        <h1>Click Wars!</h1>
-        {
-          this.props.name
-            ? this.renderGame()
-            : this.renderJoinForm()
-        }
-      </div>
-    );
+    return this.props.name
+      ? this.renderGame()
+      : this.renderJoinForm();
   }
 
   renderJoinForm() {
     return (
-      <form onSubmit={this.join}>
-        <label>Your name</label>
-        <input type="text" size="20" value={this.state.name} onInput={this.changeName}/>
-        <input type="submit" value="Join"/>
-      </form>
+      <div id="content">
+        <form onSubmit={this.join}>
+          <label>Your name</label>
+          <input type="text" size="20" value={this.state.name} onInput={this.changeName}/>
+          <input type="submit" value="Join"/>
+        </form>
+      </div>
     );
   }
 
   renderGame() {
     return (
-      <div>
-        <dl>
-          <dt>Joined as</dt>
-          <dd>{ this.props.name }</dd>
-
-          <dt>Team</dt>
-          <dd>{ this.props.team }</dd>
-        </dl>
-        {
-            (this.props.gameStatus === 'waiting' )  ? this.renderWaitingState()
-          : (this.props.gameStatus === 'starting')  ? this.renderStartingState()
-          : (this.props.gameStatus === 'started' )  ? this.renderStartedState()
-                                                    : this.renderStoppedState()
-        }
-      </div>
+        (this.props.gameStatus === 'waiting' )  ? this.renderWaitingState()
+      : (this.props.gameStatus === 'starting')  ? this.renderStartingState()
+      : (this.props.gameStatus === 'started' )  ? this.renderStartedState()
+                                                : this.renderStoppedState()
     );
   }
 
@@ -83,42 +67,34 @@ export default class UserInterface extends React.Component {
     var blueScore = this.props.teams.Blue.score;
     return (
       <div>
-        <Winner red={redScore} blue={blueScore}/>
-        <Scoreboard red={redScore} blue={blueScore}/>
-
-        <p>
-          Next game in
-          <Countdown timestamp={this.props.countdown}/>
-          seconds...
-        </p>
+        <Countdown status="Waiting for more players..." timestamp={this.props.countdown}/>
+        <div id="content">
+          <Winner red={redScore} blue={blueScore}/>
+          <Scoreboard red={redScore} blue={blueScore}/>
+        </div>
       </div>
     );
   }
 
   renderStartingState() {
-    return (
-      <h2>
-        Starting in
-        <Countdown timestamp={this.props.countdown}/>
-        seconds...
-      </h2>
-    )
+    return <Countdown status="Get ready!" timestamp={this.props.countdown}/>;
   }
 
   renderStartedState() {
     return (
       <div>
-        <h2>Started!</h2>
+        <Countdown status="Get to clicking!" timestamp={this.props.countdown}/>
+        <div id="content">
+          <Scoreboard
+            red={this.props.teams.Red.score}
+            blue={this.props.teams.Blue.score}/>
 
-        <Scoreboard
-          red={this.props.teams.Red.score}
-          blue={this.props.teams.Blue.score}/>
-
-        <button
-          className={this.props.team}
-          onMouseDown={this.click}>
-          Click
-        </button>
+          <button
+            className={this.props.team}
+            onMouseDown={this.click}>
+            Click
+          </button>
+        </div>
       </div>
     );
   }

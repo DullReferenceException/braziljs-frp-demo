@@ -26,23 +26,20 @@ export default class AdminInterface extends React.Component {
   }
 
   render() {
-    return (
-      <div id="main">
-        <h1>Click Wars</h1>
-        { this.props.status && this['render_' + this.props.status]() }
-      </div>
-    );
+    return this.props.status ? this['render_' + this.props.status]() : <div/>;
   }
 
   render_stopped() {
     return (
-      <form id="start-parameters" onSubmit={this.start}>
-        <h2>Game Settings</h2>
+      <section id="content">
+        <form id="start-parameters" onSubmit={this.start}>
+          <h2>Game Settings</h2>
 
-        <label>Seconds</label>
-        <input type="numeric" value={this.state.seconds} onChange={this.changeSeconds}/>
-        <input type="submit" value="Start"/>
-      </form>
+          <label>Seconds</label>
+          <input type="numeric" value={this.state.seconds} onChange={this.changeSeconds}/>
+          <input type="submit" value="Start"/>
+        </form>
+      </section>
     );
   }
 
@@ -51,26 +48,17 @@ export default class AdminInterface extends React.Component {
     var blue = this.props.teams[1].score;
     return (
       <div>
-        <Winner red={red} blue={blue}/>
-        <Scoreboard red={red} blue={blue}/>
-
-        <p>
-          Next game in
-          <Countdown timestamp={this.props.countdown}/>
-          seconds...
-        </p>
+        <Countdown status="Waiting for more players..." timestamp={this.props.countdown}/>
+        <div id="content">
+          <Winner red={red} blue={blue}/>
+          <Scoreboard red={red} blue={blue}/>
+        </div>
       </div>
     );
   }
 
   render_starting() {
-    return (
-      <h2>
-        Starting in
-        <Countdown timestamp={this.props.countdown}/>
-        seconds...
-      </h2>
-    );
+    return <Countdown status="Starting..." timestamp={this.props.countdown}/>;
   }
 
   render_started() {
@@ -78,7 +66,10 @@ export default class AdminInterface extends React.Component {
     var blue = this.props.teams[1].score;
     return (
       <div>
-        <Scoreboard red={red} blue={blue}/>
+        <Countdown status="Time remaining:" timestamp={this.props.countdown}/>
+        <div id="content">
+          <Scoreboard red={red} blue={blue}/>
+        </div>
       </div>
     );
   }

@@ -20461,6 +20461,8 @@
 
 	var _classCallCheck = __webpack_require__(186)['default'];
 
+	var _slicedToArray = __webpack_require__(196)['default'];
+
 	var _interopRequireDefault = __webpack_require__(1)['default'];
 
 	Object.defineProperty(exports, '__esModule', {
@@ -20471,9 +20473,17 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _kefir = __webpack_require__(191);
+
+	var _kefir2 = _interopRequireDefault(_kefir);
+
 	var _AdminInterfaceJsx = __webpack_require__(187);
 
 	var _AdminInterfaceJsx2 = _interopRequireDefault(_AdminInterfaceJsx);
+
+	var _commonUtilsAnimationFrames = __webpack_require__(241);
+
+	var _commonUtilsAnimationFrames2 = _interopRequireDefault(_commonUtilsAnimationFrames);
 
 	var _state = __webpack_require__(192);
 
@@ -20493,8 +20503,12 @@
 	    value: function componentDidMount() {
 	      var _this = this;
 
-	      _state2['default'].onValue(function (s) {
-	        return _this.setState(s);
+	      _kefir2['default'].combine([_commonUtilsAnimationFrames2['default']], [_state2['default']]).onValue(function (_ref) {
+	        var _ref2 = _slicedToArray(_ref, 2);
+
+	        var frame = _ref2[0];
+	        var state = _ref2[1];
+	        return _this.setState(state);
 	      });
 	    }
 	  }, {
@@ -21030,35 +21044,30 @@
 	  _createClass(AdminInterface, [{
 	    key: 'render',
 	    value: function render() {
-	      return _react2['default'].createElement(
-	        'div',
-	        { id: 'main' },
-	        _react2['default'].createElement(
-	          'h1',
-	          null,
-	          'Click Wars'
-	        ),
-	        this.props.status && this['render_' + this.props.status]()
-	      );
+	      return this.props.status ? this['render_' + this.props.status]() : _react2['default'].createElement('div', null);
 	    }
 	  }, {
 	    key: 'render_stopped',
 	    value: function render_stopped() {
 	      return _react2['default'].createElement(
-	        'form',
-	        { id: 'start-parameters', onSubmit: this.start },
+	        'section',
+	        { id: 'content' },
 	        _react2['default'].createElement(
-	          'h2',
-	          null,
-	          'Game Settings'
-	        ),
-	        _react2['default'].createElement(
-	          'label',
-	          null,
-	          'Seconds'
-	        ),
-	        _react2['default'].createElement('input', { type: 'numeric', value: this.state.seconds, onChange: this.changeSeconds }),
-	        _react2['default'].createElement('input', { type: 'submit', value: 'Start' })
+	          'form',
+	          { id: 'start-parameters', onSubmit: this.start },
+	          _react2['default'].createElement(
+	            'h2',
+	            null,
+	            'Game Settings'
+	          ),
+	          _react2['default'].createElement(
+	            'label',
+	            null,
+	            'Seconds'
+	          ),
+	          _react2['default'].createElement('input', { type: 'numeric', value: this.state.seconds, onChange: this.changeSeconds }),
+	          _react2['default'].createElement('input', { type: 'submit', value: 'Start' })
+	        )
 	      );
 	    }
 	  }, {
@@ -21069,27 +21078,19 @@
 	      return _react2['default'].createElement(
 	        'div',
 	        null,
-	        _react2['default'].createElement(_commonComponentsWinnerJsx2['default'], { red: red, blue: blue }),
-	        _react2['default'].createElement(_commonComponentsScoreboardJsx2['default'], { red: red, blue: blue }),
+	        _react2['default'].createElement(_commonComponentsCountdownJsx2['default'], { status: 'Waiting for more players...', timestamp: this.props.countdown }),
 	        _react2['default'].createElement(
-	          'p',
-	          null,
-	          'Next game in',
-	          _react2['default'].createElement(_commonComponentsCountdownJsx2['default'], { timestamp: this.props.countdown }),
-	          'seconds...'
+	          'div',
+	          { id: 'content' },
+	          _react2['default'].createElement(_commonComponentsWinnerJsx2['default'], { red: red, blue: blue }),
+	          _react2['default'].createElement(_commonComponentsScoreboardJsx2['default'], { red: red, blue: blue })
 	        )
 	      );
 	    }
 	  }, {
 	    key: 'render_starting',
 	    value: function render_starting() {
-	      return _react2['default'].createElement(
-	        'h2',
-	        null,
-	        'Starting in',
-	        _react2['default'].createElement(_commonComponentsCountdownJsx2['default'], { timestamp: this.props.countdown }),
-	        'seconds...'
-	      );
+	      return _react2['default'].createElement(_commonComponentsCountdownJsx2['default'], { status: 'Starting...', timestamp: this.props.countdown });
 	    }
 	  }, {
 	    key: 'render_started',
@@ -21099,7 +21100,12 @@
 	      return _react2['default'].createElement(
 	        'div',
 	        null,
-	        _react2['default'].createElement(_commonComponentsScoreboardJsx2['default'], { red: red, blue: blue })
+	        _react2['default'].createElement(_commonComponentsCountdownJsx2['default'], { status: 'Time remaining:', timestamp: this.props.countdown }),
+	        _react2['default'].createElement(
+	          'div',
+	          { id: 'content' },
+	          _react2['default'].createElement(_commonComponentsScoreboardJsx2['default'], { red: red, blue: blue })
+	        )
 	      );
 	    }
 	  }, {
@@ -26672,15 +26678,15 @@
 	    return JSON.parse(e.data);
 	  });
 
-	  var drift = inboundMessages.scan(function (accum, msg) {
-	    var diff = Date.now() - msg.timestamp;
-	    return {
-	      sum: accum.sum + diff,
-	      count: accum.count + 1
-	    };
-	  }, { sum: 0, count: 0 }).map(function (accum) {
-	    return accum.count ? accum.sum / accum.count : 0;
-	  }).toProperty();
+	  var drift = inboundMessages.map(function (msg) {
+	    return msg.timestamp - Date.now();
+	  }).slidingWindow(5, 1).map(function (lags) {
+	    return lags.reduce(function (sum, lag) {
+	      return sum + lag;
+	    }, 0) / lags.length;
+	  }).toProperty(function () {
+	    return 0;
+	  });
 
 	  var outboundMessages = _kefir2['default'].pool();
 
@@ -27353,20 +27359,24 @@
 	  _createClass(Countdown, [{
 	    key: 'render',
 	    value: function render() {
-	      var _this = this;
-
 	      var remaining = this.props.timestamp - Date.now();
 	      var seconds = Math.max(Math.ceil(remaining / 1000), 0);
 	      var opacity = seconds ? remaining % 1000 / 1000 : 1.0;
-	      requestAnimationFrame(function () {
-	        return _this.forceUpdate();
-	      });
+	      seconds = seconds < 10 ? '0' + seconds : seconds;
 	      return _react2['default'].createElement(
-	        'span',
-	        { style: { opacity: opacity } },
-	        ' ',
-	        seconds,
-	        ' '
+	        'div',
+	        { className: 'countdown' },
+	        _react2['default'].createElement(
+	          'div',
+	          { className: 'status' },
+	          this.props.status
+	        ),
+	        _react2['default'].createElement(
+	          'div',
+	          { className: 'seconds', style: { opacity: opacity } },
+	          ':',
+	          seconds
+	        )
 	      );
 	    }
 	  }]);
@@ -27375,6 +27385,30 @@
 	})(_react2['default'].Component);
 
 	exports['default'] = Countdown;
+	module.exports = exports['default'];
+
+/***/ },
+/* 240 */,
+/* 241 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _interopRequireDefault = __webpack_require__(1)['default'];
+
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+
+	var _kefir = __webpack_require__(191);
+
+	var _kefir2 = _interopRequireDefault(_kefir);
+
+	exports['default'] = _kefir2['default'].repeat(function () {
+	  return _kefir2['default'].fromCallback(function (cb) {
+	    return requestAnimationFrame(cb);
+	  });
+	});
 	module.exports = exports['default'];
 
 /***/ }

@@ -1,5 +1,7 @@
 import React from 'react';
+import kefir from 'kefir';
 import AdminInterface from './AdminInterface.jsx';
+import animationFrames from '../../../common/utils/animation-frames';
 import state from '../state';
 
 export default class AdminState extends React.Component {
@@ -8,7 +10,9 @@ export default class AdminState extends React.Component {
   }
 
   componentDidMount() {
-    state.onValue(s => this.setState(s));
+    kefir
+      .combine([animationFrames], [state])
+      .onValue(([frame, state]) => this.setState(state));
   }
 
   render() {

@@ -1,9 +1,29 @@
 body {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    margin: 0;
+}
+
+#content {
+    margin: 1em;
 }
 
 h3 {
     text-align: center;
+}
+
+.countdown {
+    font-size: 2vh;
+    font-size: 2vmax;
+    background-color: #7f1f7f;
+    color: white;
+    position: relative;
+    padding: 0.5em 1em;
+}
+
+.countdown .seconds {
+    position: absolute;
+    right: 1em;
+    top: 0.5em;
 }
 
 .scores {

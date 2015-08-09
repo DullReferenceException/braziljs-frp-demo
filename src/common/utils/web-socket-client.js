@@ -24,15 +24,10 @@ export default function createSocketClient({ url, impl }) {
     .map(e => JSON.parse(e.data));
 
   const drift = inboundMessages
-    .scan((accum, msg) => {
-      var diff = Date.now() - msg.timestamp;
-      return {
-        sum: accum.sum + diff,
-        count: accum.count + 1
-      }
-    }, { sum: 0, count: 0 })
-    .map(accum => accum.count ? accum.sum / accum.count : 0)
-    .toProperty();
+    .map(msg => msg.timestamp - Date.now())
+    .slidingWindow(5, 1)
+    .map(lags => lags.reduce((sum, lag) => sum + lag, 0) / lags.length)
+    .toProperty(() => 0);
 
   const outboundMessages = kefir.pool();
 
