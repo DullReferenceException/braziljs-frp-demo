@@ -2,6 +2,7 @@ import React from 'react';
 import Scoreboard from '../../../common/components/Scoreboard.jsx';
 import Winner from '../../../common/components/Winner.jsx';
 import Countdown from '../../../common/components/Countdown.jsx';
+import CountdownHeader from '../../../common/components/CountdownHeader.jsx';
 import dispatcher from '../dispatcher';
 import '../../../common/utils/kefir-extensions';
 
@@ -48,7 +49,7 @@ export default class AdminInterface extends React.Component {
     var blue = this.props.teams[1].score;
     return (
       <div>
-        <Countdown status="Waiting for more players..." timestamp={this.props.countdown}/>
+        <CountdownHeader status="Waiting for more players..." timestamp={this.props.countdown}/>
         <div id="content">
           <Winner red={red} blue={blue}/>
           <Scoreboard red={red} blue={blue}/>
@@ -58,7 +59,16 @@ export default class AdminInterface extends React.Component {
   }
 
   render_starting() {
-    return <Countdown status="Starting..." timestamp={this.props.countdown}/>;
+    return (
+      <div>
+        <CountdownHeader status="Starting..." timestamp={this.props.countdown}/>
+        <div id="content">
+          <div className="big-countdown">
+            <Countdown timestamp={this.props.countdown}/>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   render_started() {
@@ -66,7 +76,7 @@ export default class AdminInterface extends React.Component {
     var blue = this.props.teams[1].score;
     return (
       <div>
-        <Countdown status="Time remaining:" timestamp={this.props.countdown}/>
+        <CountdownHeader status="Time remaining:" timestamp={this.props.countdown}/>
         <div id="content">
           <Scoreboard red={red} blue={blue}/>
         </div>

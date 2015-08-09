@@ -2,6 +2,7 @@ import React from 'react';
 import Scoreboard from '../../../common/components/Scoreboard.jsx';
 import Winner from '../../../common/components/Winner.jsx';
 import Countdown from '../../../common/components/Countdown.jsx';
+import CountdownHeader from '../../../common/components/CountdownHeader.jsx';
 import dispatcher from '../dispatcher';
 
 export default class UserInterface extends React.Component {
@@ -67,7 +68,7 @@ export default class UserInterface extends React.Component {
     var blueScore = this.props.teams.Blue.score;
     return (
       <div>
-        <Countdown status="Waiting for more players..." timestamp={this.props.countdown}/>
+        <CountdownHeader status="Waiting for more players..." timestamp={this.props.countdown}/>
         <div id="content">
           <Winner red={redScore} blue={blueScore}/>
           <Scoreboard red={redScore} blue={blueScore}/>
@@ -77,13 +78,22 @@ export default class UserInterface extends React.Component {
   }
 
   renderStartingState() {
-    return <Countdown status="Get ready!" timestamp={this.props.countdown}/>;
+    return (
+      <div>
+        <CountdownHeader status="Get ready!" timestamp={this.props.countdown}/>
+        <div id="content">
+          <div className="big-countdown">
+            <Countdown timestamp={this.props.countdown}/>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   renderStartedState() {
     return (
       <div>
-        <Countdown status="Get to clicking!" timestamp={this.props.countdown}/>
+        <CountdownHeader status="Get to clicking!" timestamp={this.props.countdown}/>
         <div id="content">
           <Scoreboard
             red={this.props.teams.Red.score}

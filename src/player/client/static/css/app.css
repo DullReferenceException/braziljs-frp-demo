@@ -56,6 +56,14 @@ input[type="submit"] {
     top: 0.5em;
 }
 
+.big-countdown {
+    text-align: center;
+    margin-top: 10vh;
+    margin-top: 10vmax;
+    font-size: 20vh;
+    font-size: 20vmax;
+}
+
 .scores {
     font-size: 5vh;
     font-size: 5vmax;

@@ -26,6 +26,12 @@ h3 {
     top: 0.5em;
 }
 
+.big-countdown {
+    text-align: center;
+    font-size: 15vh;
+    font-size: 15vmax;
+}
+
 .scores {
     font-size: 5vmax;
     margin: 3vmax;

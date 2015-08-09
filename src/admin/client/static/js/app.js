@@ -21022,6 +21022,10 @@
 
 	var _commonComponentsCountdownJsx2 = _interopRequireDefault(_commonComponentsCountdownJsx);
 
+	var _commonComponentsCountdownHeaderJsx = __webpack_require__(242);
+
+	var _commonComponentsCountdownHeaderJsx2 = _interopRequireDefault(_commonComponentsCountdownHeaderJsx);
+
 	var _dispatcher = __webpack_require__(188);
 
 	var _dispatcher2 = _interopRequireDefault(_dispatcher);
@@ -21078,7 +21082,7 @@
 	      return _react2['default'].createElement(
 	        'div',
 	        null,
-	        _react2['default'].createElement(_commonComponentsCountdownJsx2['default'], { status: 'Waiting for more players...', timestamp: this.props.countdown }),
+	        _react2['default'].createElement(_commonComponentsCountdownHeaderJsx2['default'], { status: 'Waiting for more players...', timestamp: this.props.countdown }),
 	        _react2['default'].createElement(
 	          'div',
 	          { id: 'content' },
@@ -21090,7 +21094,20 @@
 	  }, {
 	    key: 'render_starting',
 	    value: function render_starting() {
-	      return _react2['default'].createElement(_commonComponentsCountdownJsx2['default'], { status: 'Starting...', timestamp: this.props.countdown });
+	      return _react2['default'].createElement(
+	        'div',
+	        null,
+	        _react2['default'].createElement(_commonComponentsCountdownHeaderJsx2['default'], { status: 'Starting...', timestamp: this.props.countdown }),
+	        _react2['default'].createElement(
+	          'div',
+	          { id: 'content' },
+	          _react2['default'].createElement(
+	            'div',
+	            { className: 'big-countdown' },
+	            _react2['default'].createElement(_commonComponentsCountdownJsx2['default'], { timestamp: this.props.countdown })
+	          )
+	        )
+	      );
 	    }
 	  }, {
 	    key: 'render_started',
@@ -21100,7 +21117,7 @@
 	      return _react2['default'].createElement(
 	        'div',
 	        null,
-	        _react2['default'].createElement(_commonComponentsCountdownJsx2['default'], { status: 'Time remaining:', timestamp: this.props.countdown }),
+	        _react2['default'].createElement(_commonComponentsCountdownHeaderJsx2['default'], { status: 'Time remaining:', timestamp: this.props.countdown }),
 	        _react2['default'].createElement(
 	          'div',
 	          { id: 'content' },
@@ -27354,6 +27371,7 @@
 	    _classCallCheck(this, Countdown);
 
 	    _get(Object.getPrototypeOf(Countdown.prototype), 'constructor', this).call(this, props);
+	    this.state = {};
 	  }
 
 	  _createClass(Countdown, [{
@@ -27362,21 +27380,13 @@
 	      var remaining = this.props.timestamp - Date.now();
 	      var seconds = Math.max(Math.ceil(remaining / 1000), 0);
 	      var opacity = seconds ? remaining % 1000 / 1000 : 1.0;
-	      seconds = seconds < 10 ? '0' + seconds : seconds;
+	      if (this.props.prefix) {
+	        seconds = (seconds < 10 ? ':0' : ':') + seconds;
+	      }
 	      return _react2['default'].createElement(
-	        'div',
-	        { className: 'countdown' },
-	        _react2['default'].createElement(
-	          'div',
-	          { className: 'status' },
-	          this.props.status
-	        ),
-	        _react2['default'].createElement(
-	          'div',
-	          { className: 'seconds', style: { opacity: opacity } },
-	          ':',
-	          seconds
-	        )
+	        'span',
+	        { style: { opacity: opacity } },
+	        seconds
 	      );
 	    }
 	  }]);
@@ -27409,6 +27419,69 @@
 	    return requestAnimationFrame(cb);
 	  });
 	});
+	module.exports = exports['default'];
+
+/***/ },
+/* 242 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _get = __webpack_require__(159)['default'];
+
+	var _inherits = __webpack_require__(173)['default'];
+
+	var _createClass = __webpack_require__(183)['default'];
+
+	var _classCallCheck = __webpack_require__(186)['default'];
+
+	var _interopRequireDefault = __webpack_require__(1)['default'];
+
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _CountdownJsx = __webpack_require__(239);
+
+	var _CountdownJsx2 = _interopRequireDefault(_CountdownJsx);
+
+	var CountdownHeader = (function (_React$Component) {
+	  _inherits(CountdownHeader, _React$Component);
+
+	  function CountdownHeader(props) {
+	    _classCallCheck(this, CountdownHeader);
+
+	    _get(Object.getPrototypeOf(CountdownHeader.prototype), 'constructor', this).call(this, props);
+	  }
+
+	  _createClass(CountdownHeader, [{
+	    key: 'render',
+	    value: function render() {
+	      return _react2['default'].createElement(
+	        'div',
+	        { className: 'countdown' },
+	        _react2['default'].createElement(
+	          'div',
+	          { className: 'status' },
+	          this.props.status
+	        ),
+	        _react2['default'].createElement(
+	          'div',
+	          { className: 'seconds' },
+	          _react2['default'].createElement(_CountdownJsx2['default'], { prefix: true, timestamp: this.props.timestamp })
+	        )
+	      );
+	    }
+	  }]);
+
+	  return CountdownHeader;
+	})(_react2['default'].Component);
+
+	exports['default'] = CountdownHeader;
 	module.exports = exports['default'];
 
 /***/ }
