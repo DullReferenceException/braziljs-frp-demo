@@ -27088,6 +27088,10 @@
 
 	var _commonComponentsWinnerJsx2 = _interopRequireDefault(_commonComponentsWinnerJsx);
 
+	var _commonComponentsMVPJsx = __webpack_require__(245);
+
+	var _commonComponentsMVPJsx2 = _interopRequireDefault(_commonComponentsMVPJsx);
+
 	var _commonComponentsCountdownJsx = __webpack_require__(239);
 
 	var _commonComponentsCountdownJsx2 = _interopRequireDefault(_commonComponentsCountdownJsx);
@@ -27095,6 +27099,10 @@
 	var _commonComponentsCountdownHeaderJsx = __webpack_require__(242);
 
 	var _commonComponentsCountdownHeaderJsx2 = _interopRequireDefault(_commonComponentsCountdownHeaderJsx);
+
+	var _JoinedStatusJsx = __webpack_require__(243);
+
+	var _JoinedStatusJsx2 = _interopRequireDefault(_JoinedStatusJsx);
 
 	var _dispatcher = __webpack_require__(232);
 
@@ -27137,7 +27145,12 @@
 	  }, {
 	    key: 'renderGame',
 	    value: function renderGame() {
-	      return this.props.gameStatus === 'waiting' ? this.renderWaitingState() : this.props.gameStatus === 'starting' ? this.renderStartingState() : this.props.gameStatus === 'started' ? this.renderStartedState() : this.renderStoppedState();
+	      return _react2['default'].createElement(
+	        'div',
+	        null,
+	        this.props.gameStatus === 'waiting' ? this.renderWaitingState() : this.props.gameStatus === 'starting' ? this.renderStartingState() : this.props.gameStatus === 'started' ? this.renderStartedState() : this.renderStoppedState(),
+	        _react2['default'].createElement(_JoinedStatusJsx2['default'], { name: this.props.name, team: this.props.team })
+	      );
 	    }
 	  }, {
 	    key: 'renderStoppedState',
@@ -27161,6 +27174,7 @@
 	          'div',
 	          { id: 'content' },
 	          _react2['default'].createElement(_commonComponentsWinnerJsx2['default'], { red: redScore, blue: blueScore }),
+	          _react2['default'].createElement(_commonComponentsMVPJsx2['default'], { player: this.props.topPlayer }),
 	          _react2['default'].createElement(_commonComponentsScoreboardJsx2['default'], { red: redScore, blue: blueScore })
 	        )
 	      );
@@ -27349,7 +27363,7 @@
 	    value: function render() {
 	      var winner = this.props.red === this.props.blue ? 'Tie' : this.props.red < this.props.blue ? 'Blue' : 'Red';
 	      return _react2['default'].createElement(
-	        'h3',
+	        'div',
 	        { className: 'winner' },
 	        'Winner: ',
 	        _react2['default'].createElement(
@@ -27524,6 +27538,127 @@
 	})(_react2['default'].Component);
 
 	exports['default'] = CountdownHeader;
+	module.exports = exports['default'];
+
+/***/ },
+/* 243 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _get = __webpack_require__(159)['default'];
+
+	var _inherits = __webpack_require__(173)['default'];
+
+	var _createClass = __webpack_require__(183)['default'];
+
+	var _classCallCheck = __webpack_require__(186)['default'];
+
+	var _interopRequireDefault = __webpack_require__(1)['default'];
+
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var JoinedStatus = (function (_React$Component) {
+	  _inherits(JoinedStatus, _React$Component);
+
+	  function JoinedStatus(props) {
+	    _classCallCheck(this, JoinedStatus);
+
+	    _get(Object.getPrototypeOf(JoinedStatus.prototype), 'constructor', this).call(this, props);
+	    this.state = {};
+	  }
+
+	  _createClass(JoinedStatus, [{
+	    key: 'render',
+	    value: function render() {
+	      return _react2['default'].createElement(
+	        'div',
+	        { id: 'join-status' },
+	        'Joined',
+	        ' ',
+	        _react2['default'].createElement(
+	          'span',
+	          { style: { backgroundColor: this.props.team } },
+	          ' ',
+	          this.props.team,
+	          ' '
+	        ),
+	        ' ',
+	        'team as',
+	        ' ',
+	        this.props.name
+	      );
+	    }
+	  }]);
+
+	  return JoinedStatus;
+	})(_react2['default'].Component);
+
+	exports['default'] = JoinedStatus;
+	module.exports = exports['default'];
+
+/***/ },
+/* 244 */,
+/* 245 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _get = __webpack_require__(159)['default'];
+
+	var _inherits = __webpack_require__(173)['default'];
+
+	var _createClass = __webpack_require__(183)['default'];
+
+	var _classCallCheck = __webpack_require__(186)['default'];
+
+	var _interopRequireDefault = __webpack_require__(1)['default'];
+
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var MVP = (function (_React$Component) {
+	  _inherits(MVP, _React$Component);
+
+	  function MVP(props) {
+	    _classCallCheck(this, MVP);
+
+	    _get(Object.getPrototypeOf(MVP.prototype), 'constructor', this).call(this, props);
+	    this.state = {};
+	  }
+
+	  _createClass(MVP, [{
+	    key: 'render',
+	    value: function render() {
+	      return this.props.player ? _react2['default'].createElement(
+	        'div',
+	        { id: 'top-player' },
+	        'MVP:',
+	        ' ',
+	        this.props.player.name,
+	        ',',
+	        ' ',
+	        this.props.player.score + ' ',
+	        'points'
+	      ) : _react2['default'].createElement('div', null);
+	    }
+	  }]);
+
+	  return MVP;
+	})(_react2['default'].Component);
+
+	exports['default'] = MVP;
 	module.exports = exports['default'];
 
 /***/ }

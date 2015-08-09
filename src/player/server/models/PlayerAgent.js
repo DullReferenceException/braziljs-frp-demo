@@ -56,7 +56,8 @@ export default class PlayerAgent {
         team: player && player.team,
         gameStatus: state.status,
         countdown: state.countdown,
-        teams: state.teams
+        teams: state.teams,
+        topPlayer: state.topPlayer
       }
     })
     .toProperty(() => initialState);

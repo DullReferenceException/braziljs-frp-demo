@@ -3,6 +3,7 @@ import Scoreboard from '../../../common/components/Scoreboard.jsx';
 import Winner from '../../../common/components/Winner.jsx';
 import Countdown from '../../../common/components/Countdown.jsx';
 import CountdownHeader from '../../../common/components/CountdownHeader.jsx';
+import MVP from './../../../common/components/MVP.jsx';
 import dispatcher from '../dispatcher';
 import '../../../common/utils/kefir-extensions';
 
@@ -52,6 +53,7 @@ export default class AdminInterface extends React.Component {
         <CountdownHeader status="Waiting for more players..." timestamp={this.props.countdown}/>
         <div id="content">
           <Winner red={red} blue={blue}/>
+          <MVP player={this.props.topPlayer}/>
           <Scoreboard red={red} blue={blue}/>
         </div>
       </div>

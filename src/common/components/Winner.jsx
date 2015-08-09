@@ -13,9 +13,9 @@ export default class Winner extends React.Component {
         ? 'Blue'
         : 'Red';
     return (
-      <h3 className="winner">
+      <div className="winner">
         Winner: <span className={'winner ' + winner}>{winner}</span>
-      </h3>
+      </div>
     );
   }
 }

@@ -1,8 +1,10 @@
 import React from 'react';
 import Scoreboard from '../../../common/components/Scoreboard.jsx';
 import Winner from '../../../common/components/Winner.jsx';
+import MVP from './../../../common/components/MVP.jsx';
 import Countdown from '../../../common/components/Countdown.jsx';
 import CountdownHeader from '../../../common/components/CountdownHeader.jsx';
+import JoinStatus from './JoinedStatus.jsx';
 import dispatcher from '../dispatcher';
 
 export default class UserInterface extends React.Component {
@@ -52,10 +54,15 @@ export default class UserInterface extends React.Component {
 
   renderGame() {
     return (
-        (this.props.gameStatus === 'waiting' )  ? this.renderWaitingState()
-      : (this.props.gameStatus === 'starting')  ? this.renderStartingState()
-      : (this.props.gameStatus === 'started' )  ? this.renderStartedState()
-                                                : this.renderStoppedState()
+      <div>
+        {
+          (this.props.gameStatus === 'waiting' )  ? this.renderWaitingState()
+            : (this.props.gameStatus === 'starting')  ? this.renderStartingState()
+            : (this.props.gameStatus === 'started' )  ? this.renderStartedState()
+            : this.renderStoppedState()
+        }
+        <JoinStatus name={this.props.name} team={this.props.team}/>
+      </div>
     );
   }
 
@@ -71,6 +78,7 @@ export default class UserInterface extends React.Component {
         <CountdownHeader status="Waiting for more players..." timestamp={this.props.countdown}/>
         <div id="content">
           <Winner red={redScore} blue={blueScore}/>
+          <MVP player={this.props.topPlayer}/>
           <Scoreboard red={redScore} blue={blueScore}/>
         </div>
       </div>

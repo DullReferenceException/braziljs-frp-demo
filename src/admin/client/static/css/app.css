@@ -28,6 +28,8 @@ h3 {
 
 .big-countdown {
     text-align: center;
+    margin-top: 15vh;
+    margin-top: 15vmax;
     font-size: 15vh;
     font-size: 15vmax;
 }
@@ -60,6 +62,7 @@ h3 {
 }
 
 .winner {
+    text-align: center;
     font-size: 8vh;
     font-size: 8vmax;
 }
@@ -70,4 +73,10 @@ h3 {
 
 .winner.Blue {
     color: blue;
+}
+
+#top-player {
+    font-size: 6vh;
+    font-size: 6vmax;
+    text-align: center;
 }
