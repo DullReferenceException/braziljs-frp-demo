@@ -33,7 +33,5 @@ export default {
             .map(status => ({ status: status, countdown: Date.now() + timers[status] }))
         );
       });
-
-    statusEventPool.plug(kefir.constant({ status: 'stopped' }));
   }
 }
