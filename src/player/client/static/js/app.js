@@ -26852,11 +26852,17 @@
 	    value: function componentDidMount() {
 	      var _this = this;
 
-	      _kefir2['default'].combine([_commonUtilsAnimationFrames2['default']], [_state2['default']]).onValue(function (_ref) {
+	      _kefir2['default'].combine([_commonUtilsAnimationFrames2['default']], [_state2['default']]).filter(function (_ref) {
 	        var _ref2 = _slicedToArray(_ref, 2);
 
 	        var frame = _ref2[0];
 	        var state = _ref2[1];
+	        return !!state.name;
+	      }).onValue(function (_ref3) {
+	        var _ref32 = _slicedToArray(_ref3, 2);
+
+	        var frame = _ref32[0];
+	        var state = _ref32[1];
 	        return _this.setState(state);
 	      });
 	    }
@@ -27137,7 +27143,7 @@
 	            null,
 	            'Your name'
 	          ),
-	          _react2['default'].createElement('input', { type: 'text', size: '20', value: this.state.name, onInput: this.changeName }),
+	          _react2['default'].createElement('input', { key: 'name-input', type: 'text', size: '20', value: this.state.name, onChange: this.changeName }),
 	          _react2['default'].createElement('input', { type: 'submit', value: 'Join' })
 	        )
 	      );

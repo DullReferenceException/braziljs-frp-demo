@@ -8,6 +8,7 @@ export default class PlayerState extends React.Component {
   componentDidMount() {
     kefir
       .combine([animationFrames], [stateChanges])
+      .filter(([frame, state]) => !!state.name)
       .onValue(([frame, state]) => this.setState(state));
   }
 

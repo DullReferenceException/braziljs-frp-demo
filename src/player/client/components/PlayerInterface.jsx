@@ -46,7 +46,7 @@ export default class UserInterface extends React.Component {
       <div id="content">
         <form onSubmit={this.join}>
           <label>Your name</label>
-          <input type="text" size="20" value={this.state.name} onInput={this.changeName}/>
+          <input key="name-input" type="text" size="20" value={this.state.name} onChange={this.changeName}/>
           <input type="submit" value="Join"/>
         </form>
       </div>
