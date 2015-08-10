@@ -5,10 +5,13 @@ import initialState from '../../common/initial-state';
 import gameState from '../state';
 import '../../../common/utils/kefir-extensions';
 
+const idleTimeout = 120000;
+
 export default class PlayerAgent {
   constructor(socket) {
     this.id = uuid.v4();
     this.socket = socket;
+    this.lastMessageTime = Date.now();
 
     this.handleMessagesFromPlayer();
     this.handleMessagesFromStateServer();
@@ -18,7 +21,8 @@ export default class PlayerAgent {
   handleMessagesFromPlayer() {
     const inboundPlayerMessages = kefir
       .fromEvents(this.socket, 'message')
-      .map(msg => JSON.parse(msg));
+      .map(msg => JSON.parse(msg))
+      .onValue(() => this.lastMessageTime = Date.now());
 
     this.joinRequests = inboundPlayerMessages
       .filter(m => m.type === 'join')
@@ -36,7 +40,10 @@ export default class PlayerAgent {
       }));
 
     this.leaveRequests = kefir
-      .fromEvents(this.socket, 'close')
+      .merge([
+        kefir.fromEvents(this.socket, 'close'),
+        kefir.fromEvents(this.socket, 'error')
+      ])
       .map(() => ({
         type: 'leave',
         player: this.id
@@ -48,33 +55,39 @@ export default class PlayerAgent {
   }
 
   handleMessagesFromStateServer() {
-    this.playerState = gameState.map(state => {
-      const player = state.players[this.id] || null;
-      return {
-        id: this.id,
-        name: player && player.name,
-        team: player && player.team,
-        gameStatus: state.status,
-        countdown: state.countdown,
-        teams: state.teams,
-        topPlayer: state.topPlayer
-      }
-    })
-    .toProperty(() => initialState);
+    this.playerState = gameState
+      .map(state => {
+        const player = state.players[this.id] || null;
+        return {
+          id: this.id,
+          name: player && player.name,
+          team: player && player.team,
+          gameStatus: state.status,
+          countdown: state.countdown,
+          teams: state.teams,
+          topPlayer: state.topPlayer
+        }
+      })
+      .toProperty(() => initialState)
+      .throttle(100)
+      .map(s => ({ type: 'state', state: s }));
   }
 
   sendMessagesToPlayer() {
     this.playerOutboundMessageHandler = msg => {
       msg.timestamp = Date.now();
       kefir
-        .fromNodeCallback(cb => this.socket.send(JSON.stringify(msg), cb))
+        .fromNodeCallback(cb => {
+          if (this.socket.readyState !== 1 || Date.now() - this.lastMessageTime > idleTimeout) {
+            this.socket.close();
+          } else {
+            this.socket.send(JSON.stringify(msg), cb);
+          }
+        })
         .onError(err => this.socket.close())
     };
 
-    this.playerState
-      .throttle(100)
-      .map(s => ({ type: 'state', state: s }))
-      .onValue(this.playerOutboundMessageHandler);
+    this.playerState.onValue(this.playerOutboundMessageHandler);
   }
 
   dispose() {

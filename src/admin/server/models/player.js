@@ -10,8 +10,13 @@ export default class Player{
     this.team = team;
 
     const score = dynamicValue(0,
-      gameStatus.filter(s => s.status === 'starting'), () => 0,
-      clicks.filter(e => e.player === id), score => score + 1
+      gameStatus.filter(s => s.status === 'starting'),
+      () => 0,
+
+      clicks
+        .filter(e => e.player === id)
+        .filterBy(gameStatus.map(s => s.status === 'started')),
+      score => score + 1
     );
 
     this.stream = score
