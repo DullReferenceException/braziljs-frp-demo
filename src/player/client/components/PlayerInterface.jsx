@@ -5,23 +5,17 @@ import MVP from './../../../common/components/MVP.jsx';
 import Countdown from '../../../common/components/Countdown.jsx';
 import CountdownHeader from '../../../common/components/CountdownHeader.jsx';
 import JoinStatus from './JoinedStatus.jsx';
+import JoinForm from './JoinForm.jsx';
 import dispatcher from '../dispatcher';
 
-export default class UserInterface extends React.Component {
+export default class PlayerInterface extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
   }
 
-  get join() {
-    return e => {
-      e.preventDefault();
-      dispatcher.emit('join', { name: this.state.name });
-    }
-  }
-
-  get changeName() {
-    return e => this.setState({ name: e.target.value });
+  shouldComponentUpdate(nextProps, nextState) {
+    return nextProps.name || this.props.name;
   }
 
   get click() {
@@ -42,15 +36,7 @@ export default class UserInterface extends React.Component {
   }
 
   renderJoinForm() {
-    return (
-      <div id="content">
-        <form onSubmit={this.join}>
-          <label>Your name</label>
-          <input key="name-input" type="text" size="20" value={this.state.name} onChange={this.changeName}/>
-          <input type="submit" value="Join"/>
-        </form>
-      </div>
-    );
+    return <JoinForm/>;
   }
 
   renderGame() {
