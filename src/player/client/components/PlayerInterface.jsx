@@ -25,7 +25,10 @@ export default class UserInterface extends React.Component {
   }
 
   get click() {
-    return () => dispatcher.emit('click', {});
+    return e => {
+      e.preventDefault();
+      dispatcher.emit('click', {});
+    }
   }
 
   get disableDoubleTap() {
@@ -111,7 +114,9 @@ export default class UserInterface extends React.Component {
 
           <button
             className={this.props.team}
-            onMouseDown={this.click}>
+            onTouchEnd={('ontouchstart' in window) ? this.click : (() => {})}
+            onClick={(!('ontouchstart' in window)) ? this.click : (() => {})}
+          >
             Click
           </button>
         </div>

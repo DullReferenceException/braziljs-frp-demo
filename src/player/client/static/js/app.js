@@ -27214,7 +27214,9 @@
 	            'button',
 	            {
 	              className: this.props.team,
-	              onMouseDown: this.click },
+	              onTouchEnd: 'ontouchstart' in window ? this.click : function () {},
+	              onClick: !('ontouchstart' in window) ? this.click : function () {}
+	            },
 	            'Click'
 	          )
 	        )
@@ -27242,8 +27244,9 @@
 	  }, {
 	    key: 'click',
 	    get: function get() {
-	      return function () {
-	        return _dispatcher2['default'].emit('click', {});
+	      return function (e) {
+	        e.preventDefault();
+	        _dispatcher2['default'].emit('click', {});
 	      };
 	    }
 	  }, {
