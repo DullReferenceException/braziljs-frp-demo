@@ -27170,13 +27170,13 @@
 	        'div',
 	        null,
 	        _react2['default'].createElement(_commonComponentsCountdownHeaderJsx2['default'], { status: 'Waiting for more players...', timestamp: this.props.countdown }),
-	        _react2['default'].createElement(
+	        redScore || blueScore ? _react2['default'].createElement(
 	          'div',
 	          { id: 'content' },
 	          _react2['default'].createElement(_commonComponentsWinnerJsx2['default'], { red: redScore, blue: blueScore }),
 	          _react2['default'].createElement(_commonComponentsMVPJsx2['default'], { player: this.props.topPlayer }),
 	          _react2['default'].createElement(_commonComponentsScoreboardJsx2['default'], { red: redScore, blue: blueScore })
-	        )
+	        ) : _react2['default'].createElement('div', null)
 	      );
 	    }
 	  }, {
@@ -27242,8 +27242,8 @@
 	  }, {
 	    key: 'click',
 	    get: function get() {
-	      return function (e) {
-	        _dispatcher2['default'].emit('click', {});
+	      return function () {
+	        return _dispatcher2['default'].emit('click', {});
 	      };
 	    }
 	  }, {

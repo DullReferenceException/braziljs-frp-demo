@@ -25,9 +25,7 @@ export default class UserInterface extends React.Component {
   }
 
   get click() {
-    return e => {
-      dispatcher.emit('click', {});
-    }
+    return () => dispatcher.emit('click', {});
   }
 
   get disableDoubleTap() {
@@ -76,11 +74,15 @@ export default class UserInterface extends React.Component {
     return (
       <div>
         <CountdownHeader status="Waiting for more players..." timestamp={this.props.countdown}/>
-        <div id="content">
-          <Winner red={redScore} blue={blueScore}/>
-          <MVP player={this.props.topPlayer}/>
-          <Scoreboard red={redScore} blue={blueScore}/>
-        </div>
+        {
+          (redScore || blueScore)
+          ? <div id="content">
+              <Winner red={redScore} blue={blueScore}/>
+              <MVP player={this.props.topPlayer}/>
+              <Scoreboard red={redScore} blue={blueScore}/>
+            </div>
+          : <div/>
+        }
       </div>
     );
   }
