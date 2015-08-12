@@ -15,7 +15,7 @@ export default class PlayerInterface extends React.Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    return nextProps.name || this.props.name;
+    return !!(nextProps.name || this.props.name);
   }
 
   get click() {

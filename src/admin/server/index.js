@@ -1,9 +1,9 @@
-import server from './server';
-import gameLoop from './models/game-loop';
+import webServer from './web-server';
+import { messages } from './socket-server';
 import initialStates from './messages/outbound/initial-states';
 import stateBroadcasts from './messages/outbound/state-broadcasts';
 
-server.messages.outbound.plug(initialStates);
-server.messages.outbound.plug(stateBroadcasts);
+messages.outbound.plug(initialStates);
+messages.outbound.plug(stateBroadcasts);
 
-gameLoop.start();
+webServer.onValue(() => console.log('Admin listening on http://localhost:8081/'));

@@ -16,8 +16,7 @@ export default function createSocketClient({ url, impl }) {
         }, 1000);
       })
       .endOnError()
-    )
-    .toProperty();
+    );
 
   const inboundMessages = sockets
     .flatMapLatest(s => kefir.stream(emitter => s.onmessage = emitter.emit))
@@ -26,8 +25,7 @@ export default function createSocketClient({ url, impl }) {
   const drift = inboundMessages
     .map(msg => msg.timestamp - Date.now())
     .slidingWindow(5, 1)
-    .map(lags => lags.reduce((sum, lag) => sum + lag, 0) / lags.length)
-    .toProperty(() => 0);
+    .map(lags => lags.reduce((sum, lag) => sum + lag, 0) / lags.length);
 
   const outboundMessages = kefir.pool();
 

@@ -1,5 +1,5 @@
 import kefir from 'kefir';
-import { connections } from '../../server';
+import { connections } from '../../socket-server';
 import state from '../../state';
 
 export default kefir
