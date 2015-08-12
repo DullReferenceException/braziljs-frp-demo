@@ -1,13 +1,13 @@
 import React from 'react';
 import kefir from 'kefir';
 import animationFrames from '../../../common/utils/animation-frames';
-import stateChanges from '../state';
+import state from '../state';
 import PlayerInterface from './PlayerInterface.jsx';
 
 export default class PlayerState extends React.Component {
   componentDidMount() {
     kefir
-      .combine([animationFrames], [stateChanges])
+      .combine([animationFrames], [state])
       .onValue(([frame, state]) => this.setState(state));
   }
 

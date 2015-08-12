@@ -1,0 +1,10 @@
+digraph playerUI {
+  { animationFrames, state } -> stateComponent;
+  stateComponent -> uiComponents;
+  uiComponents -> dispatcher;
+  inboundMessages -> stateMessages;
+  dispatcher -> { clicks, joins };
+  { clicks, joins } -> outboundMessages;
+  { stateMessages, timeDrift } -> state;
+  inboundMessages -> timeDrift;
+}
