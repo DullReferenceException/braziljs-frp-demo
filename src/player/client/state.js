@@ -8,5 +8,4 @@ export default kefir
   .map(([state, drift]) => {
     state.countdown = state.countdown - drift;
     return state;
-  })
-  .toProperty(() => initialState);
+  });

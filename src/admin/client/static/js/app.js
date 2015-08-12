@@ -21081,19 +21081,19 @@
 	  }, {
 	    key: 'render_waiting',
 	    value: function render_waiting() {
-	      var red = this.props.teams[0].score;
-	      var blue = this.props.teams[1].score;
+	      var red = this.props.teamScores.Red;
+	      var blue = this.props.teamScores.Blue;
 	      return _react2['default'].createElement(
 	        'div',
 	        null,
 	        _react2['default'].createElement(_commonComponentsCountdownHeaderJsx2['default'], { status: 'Waiting for more players...', timestamp: this.props.countdown }),
-	        _react2['default'].createElement(
+	        red || blue ? _react2['default'].createElement(
 	          'div',
 	          { id: 'content' },
 	          _react2['default'].createElement(_commonComponentsWinnerJsx2['default'], { red: red, blue: blue }),
 	          _react2['default'].createElement(_commonComponentsMVPJsx2['default'], { player: this.props.topPlayer }),
 	          _react2['default'].createElement(_commonComponentsScoreboardJsx2['default'], { red: red, blue: blue })
-	        )
+	        ) : _react2['default'].createElement('div', null)
 	      );
 	    }
 	  }, {
@@ -21117,8 +21117,8 @@
 	  }, {
 	    key: 'render_started',
 	    value: function render_started() {
-	      var red = this.props.teams[0].score;
-	      var blue = this.props.teams[1].score;
+	      var red = this.props.teamScores.Red;
+	      var blue = this.props.teamScores.Blue;
 	      return _react2['default'].createElement(
 	        'div',
 	        null,
@@ -26575,27 +26575,15 @@
 	  var state = _ref2[0];
 	  var drift = _ref2[1];
 
-	  var teams = {
-	    Red: { name: 'Red', score: 0, players: [] },
-	    Blue: { name: 'Blue', score: 0, players: [] }
-	  };
-	  var topPlayer = null;
-
-	  state.players.forEach(function (player) {
-	    var team = teams[player.team];
-	    team.players.push(player);
-	    team.score += player.score;
-	    topPlayer = topPlayer && topPlayer.score > player.score ? topPlayer : player;
-	  });
-
+	  var topPlayer = state.players.reduce(function (a, b) {
+	    return a && a.score > b.score ? a : b;
+	  }, null);
 	  return {
 	    status: state.status,
 	    countdown: state.countdown - drift,
-	    teams: [teams.Red, teams.Blue],
+	    teamScores: state.teamScores,
 	    topPlayer: topPlayer
 	  };
-	}).toProperty(function () {
-	  return { status: 'stopped', teams: [] };
 	});
 
 	exports['default'] = state;
@@ -27529,7 +27517,7 @@
 	  _createClass(MVP, [{
 	    key: 'render',
 	    value: function render() {
-	      return this.props.player ? _react2['default'].createElement(
+	      return this.props.player && this.props.player.score ? _react2['default'].createElement(
 	        'div',
 	        { id: 'top-player' },
 	        'MVP:',

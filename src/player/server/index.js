@@ -2,7 +2,7 @@ import kefir from 'kefir';
 import uuid from 'uuid';
 import webServer from './web-server';
 import { connections } from './player-socket-server';
-import PlayerAgent from './models/PlayerAgent';
+import PlayerAgent from './player-agent';
 
 connections
   .map(socket => new PlayerAgent(socket))

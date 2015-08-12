@@ -26907,8 +26907,6 @@
 
 	  state.countdown = state.countdown - drift;
 	  return state;
-	}).toProperty(function () {
-	  return _commonInitialState2['default'];
 	});
 	module.exports = exports['default'];
 
@@ -27618,7 +27616,7 @@
 	  _createClass(MVP, [{
 	    key: 'render',
 	    value: function render() {
-	      return this.props.player ? _react2['default'].createElement(
+	      return this.props.player && this.props.player.score ? _react2['default'].createElement(
 	        'div',
 	        { id: 'top-player' },
 	        'MVP:',

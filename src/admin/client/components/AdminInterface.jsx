@@ -46,16 +46,20 @@ export default class AdminInterface extends React.Component {
   }
 
   render_waiting() {
-    var red = this.props.teams[0].score;
-    var blue = this.props.teams[1].score;
+    var red = this.props.teamScores.Red;
+    var blue = this.props.teamScores.Blue;
     return (
       <div>
         <CountdownHeader status="Waiting for more players..." timestamp={this.props.countdown}/>
-        <div id="content">
-          <Winner red={red} blue={blue}/>
-          <MVP player={this.props.topPlayer}/>
-          <Scoreboard red={red} blue={blue}/>
-        </div>
+        {
+          (red || blue)
+            ? <div id="content">
+                <Winner red={red} blue={blue}/>
+                <MVP player={this.props.topPlayer}/>
+                <Scoreboard red={red} blue={blue}/>
+              </div>
+            : <div/>
+        }
       </div>
     );
   }
@@ -74,8 +78,8 @@ export default class AdminInterface extends React.Component {
   }
 
   render_started() {
-    var red = this.props.teams[0].score;
-    var blue = this.props.teams[1].score;
+    var red = this.props.teamScores.Red;
+    var blue = this.props.teamScores.Blue;
     return (
       <div>
         <CountdownHeader status="Time remaining:" timestamp={this.props.countdown}/>

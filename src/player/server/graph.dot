@@ -1,0 +1,13 @@
+digraph playerServer {
+  webServer -> playerSocketServer;
+  playerSocketServer -> playerSocket;
+  playerSocket -> { inboundPlayerMessages, playerSocketCloses, playerSocketErrors };
+  playerSocketErrors -> playerSocketCloses;
+  inboundPlayerMessages -> { joins, clicks };
+  { playerSocketCloses, playerSocketErrors } -> leaves;
+  { joins, clicks, leaves } -> outboundStateMessages;
+  state -> playerState;
+  playerState -> outboundPlayerMessages;
+  inboundStateMessages -> state;
+  stateSocketClient -> inboundStateMessages;
+}

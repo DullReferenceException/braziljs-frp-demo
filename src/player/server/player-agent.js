@@ -1,9 +1,9 @@
 import kefir from 'kefir';
 import uuid from 'uuid';
-import { messages as stateServerMessages } from '../state-socket-client';
-import initialState from '../../common/initial-state';
-import gameState from '../state';
-import '../../../common/utils/kefir-extensions';
+import { messages as stateServerMessages } from './state-socket-client';
+import initialState from '../common/initial-state';
+import gameState from './state';
+import '../../common/utils/kefir-extensions';
 
 const idleTimeout = 120000;
 
@@ -56,21 +56,22 @@ export default class PlayerAgent {
 
   handleMessagesFromStateServer() {
     this.playerState = gameState
+      .throttle(100)
       .map(state => {
         const player = state.players[this.id] || null;
         return {
-          id: this.id,
-          name: player && player.name,
-          team: player && player.team,
-          gameStatus: state.status,
-          countdown: state.countdown,
-          teams: state.teams,
-          topPlayer: state.topPlayer
+          type: 'state',
+          state: {
+            id: this.id,
+            name: player && player.name,
+            team: player && player.team,
+            gameStatus: state.status,
+            countdown: state.countdown,
+            teams: state.teams,
+            topPlayer: state.topPlayer
+          }
         }
-      })
-      .toProperty(() => initialState)
-      .throttle(100)
-      .map(s => ({ type: 'state', state: s }));
+      });
   }
 
   sendMessagesToPlayer() {

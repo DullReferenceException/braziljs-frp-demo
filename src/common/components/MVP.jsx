@@ -7,7 +7,7 @@ export default class MVP extends React.Component {
   }
 
   render() {
-    return this.props.player
+    return (this.props.player && this.props.player.score)
       ? <div id="top-player">
           MVP:{' '}
           { this.props.player.name },{' '}
