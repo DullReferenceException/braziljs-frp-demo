@@ -7,7 +7,7 @@ digraph playerServer {
   { playerSocketCloses, playerSocketErrors } -> leaves;
   { joins, clicks, leaves } -> outboundStateMessages;
   state -> playerState;
-  playerState -> outboundPlayerMessages;
+  { playerState, playerSocket } -> outboundPlayerMessages;
   inboundStateMessages -> state;
   stateSocketClient -> inboundStateMessages;
 }
