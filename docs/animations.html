@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>FRP Animations</title>
+    <link href="./animations.css" rel="stylesheet"/>
+  </head>
+  <body>
+    <div id="map" class="animation">
+      <h2>map :: ⋙a⋙ → (a→b) → ⋙b⋙</h2>
+      <div class="stream">
+        <div class="item">A</div>
+        <div class="item">B</div>
+        <div class="item">C</div>
+        <div class="item">D</div>
+        <div class="item">E</div>
+        <div class="unary operation">map</div>
+      </div>
+    </div>
+
+    <div id="filter" class="animation">
+      <h2>filter :: ⋙a⋙ → (a→Boolean) → ⋙a⋙</h2>
+      <div class="stream">
+        <div class="item">A</div>
+        <div class="item">B</div>
+        <div class="item">C</div>
+        <div class="item">D</div>
+        <div class="item">E</div>
+        <div class="unary operation">filter</div>
+      </div>
+    </div>
+
+    <div id="scan" class="animation">
+      <h2>scan :: ⋙a⋙ → (b→a→b) → b → ⋙b⋙</h2>
+      <div class="stream">
+
+        <div class="item a">5</div>
+        <div class="item a">4</div>
+        <div class="item a">-3</div>
+        <div class="item a">2</div>
+        <div class="item a">-8</div>
+
+        <div class="item b">0</div>
+        <div class="item b">5</div>
+        <div class="item b">9</div>
+        <div class="item b">6</div>
+        <div class="item b">8</div>
+
+        <div class="item c">5</div>
+        <div class="item c">9</div>
+        <div class="item c">6</div>
+        <div class="item c">8</div>
+        <div class="item c">0</div>
+
+        <div class="unary operation">scan</div>
+      </div>
+    </div>
+  </body>
+</html>
