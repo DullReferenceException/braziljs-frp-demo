@@ -60,11 +60,11 @@ export default class AdminInterface extends React.Component {
               </div>
             : <div/>
         }
-        <p>
+        <div id="player-count">
           { this.props.numPlayers + ' ' }
           player{ this.props.numPlayers === 1 ? ' ' : 's ' }
           joined
-        </p>
+        </div>
       </div>
     );
   }

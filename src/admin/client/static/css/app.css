@@ -27,6 +27,12 @@ h3 {
     top: 0.5em;
 }
 
+#player-count {
+    font-size: 5vmax;
+    text-align: center;
+    margin: 3vmax;
+}
+
 .big-countdown {
     text-align: center;
     margin-top: 15vh;
