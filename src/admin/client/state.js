@@ -9,6 +9,7 @@ const state = kefir
       .reduce((a, b) => (a && a.score > b.score) ? a : b, null);
     return {
       status: state.status,
+      numPlayers: state.players.length,
       countdown: state.countdown - drift,
       teamScores: state.teamScores,
       topPlayer: topPlayer
