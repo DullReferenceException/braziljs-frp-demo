@@ -1,2 +1,2 @@
 require('babel/register');
-require('../src/player/server');
+require('../src/player-agent-server');

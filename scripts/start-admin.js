@@ -1,2 +1,2 @@
 require('babel/register');
-require('../src/admin/server');
+require('../src/state-server');
