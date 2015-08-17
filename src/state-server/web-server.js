@@ -1,5 +1,5 @@
 import path from 'path';
-import createWebServer from '../../common/utils/simple-web-server';
+import createWebServer from '../common/utils/simple-web-server';
 
 export default createWebServer({
   workers: 1,
