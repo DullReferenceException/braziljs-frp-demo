@@ -1,7 +1,9 @@
+var webpack = require('webpack');
+
 module.exports = {
   entry: {
-    admin: './src/admin/client/index.jsx',
-    player: './src/player/client/index.jsx'
+    'presentation-client': './src/presentation-client/index.jsx',
+    'game-client': './src/game-client/index.jsx'
   },
   module: {
     loaders: [
@@ -18,7 +20,13 @@ module.exports = {
       extensions: ['', '.js', '.jsx']
     }
   },
+  plugins: [
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': '"production"'
+    }),
+    new webpack.optimize.UglifyJsPlugin({ output: { comments: false } })
+  ],
   output: {
-    filename: './src/[name]/client/static/js/app.js'
+    filename: './src/[name]/static/js/app.js'
   }
 };
