@@ -1,0 +1,31 @@
+digraph G {
+
+  subgraph socketServer {
+    webServer -> socketServer;
+    socketServer -> connections;
+    connections -> disconnections;
+    { connections, disconnections } -> allClients;
+    connections -> inboundMessages;
+    outboundMessages -> socketSend;
+  }
+
+  inboundMessages -> clicks;
+  inboundMessages -> joinings;
+  inboundMessages -> leavings;
+
+  { connections, state } -> initStates;
+  { state, allClients } -> stateBroadcasts;
+  { joinings, leavings, disconnections } -> roster;
+  { webServer, roster } -> status;
+  { clicks, roster, status } -> scores;
+  { status, scores, roster } -> state;
+  { initStates, stateBroadcasts } -> outboundMessages;
+
+  webServer              [style=filled, fillcolor="#7fff7f"];
+  socketServer           [style=filled, fillcolor="#7fff7f"];
+  connections            [style=filled, fillcolor="#7fff7f"];
+  initStates             [style=filled, fillcolor="#7fff7f"];
+  state                  [style=filled, fillcolor="#7fff7f"];
+  outboundMessages       [style=filled, fillcolor="#7fff7f"];
+  socketSend             [style=filled, fillcolor="#7fff7f"];
+}

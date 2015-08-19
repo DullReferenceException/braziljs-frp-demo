@@ -1,0 +1,9 @@
+digraph status {
+  { waits, countdowns, starts } -> timers [style=dotted,arrowhead=none];
+
+  timers -> countdowns;
+  { timers, roster } -> starts;
+  { serverStarts, timers, roster } -> waits;
+
+  { waits, countdowns, starts } -> status;
+}

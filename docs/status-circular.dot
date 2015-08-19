@@ -1,0 +1,15 @@
+digraph status {
+  roster -> haveCompetitors;
+
+  { serverStarts, unsuccessfulWaits, finishedRounds } -> startedWaits;
+  startedWaits -> finishedWaits;
+  { finishedWaits, haveCompetitors } -> successfulWaits;
+  { finishedWaits, haveCompetitors } -> unsuccessfulWaits;
+
+  successfulWaits -> startedCountdowns;
+  startedCountdowns -> finishedCountdowns;
+  finishedCountdowns -> startedRounds;
+  startedRounds -> finishedRounds;
+
+  { startedWaits, startedCountdowns, startedRounds }-> status;
+}

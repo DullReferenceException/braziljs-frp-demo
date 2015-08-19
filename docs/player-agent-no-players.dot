@@ -1,0 +1,28 @@
+digraph playerServer {
+  webServer -> playerSocketServer;
+  playerSocketServer -> playerSocket;
+  playerSocket -> { inboundPlayerMessages, playerSocketCloses, playerSocketErrors };
+  playerSocketErrors -> playerSocketCloses;
+  inboundPlayerMessages -> { joins, clicks };
+  { playerSocketCloses, playerSocketErrors } -> leaves;
+  { joins, clicks, leaves } -> outboundStateMessages;
+  { state, playerSocket } -> playerState;
+  playerState -> outboundPlayerMessages;
+  inboundStateMessages -> state;
+  stateSocketClient -> inboundStateMessages;
+
+  playerSocket            [style=filled, fillcolor="#ff7f7f"];
+  inboundPlayerMessages   [style=filled, fillcolor="#ff7f7f"];
+  playerSocketCloses      [style=filled, fillcolor="#ff7f7f"];
+  playerSocketErrors      [style=filled, fillcolor="#ff7f7f"];
+  joins                   [style=filled, fillcolor="#ff7f7f"];
+  clicks                  [style=filled, fillcolor="#ff7f7f"];
+  leaves                  [style=filled, fillcolor="#ff7f7f"];
+  outboundStateMessages   [style=filled, fillcolor="#ff7f7f"];
+  playerState             [style=filled, fillcolor="#ff7f7f"];
+  outboundPlayerMessages  [style=filled, fillcolor="#ff7f7f"];
+
+  state                   [style=filled, fillcolor=orange];
+  inboundStateMessages    [style=filled, fillcolor=orange];
+  stateSocketClient       [style=filled, fillcolor=orange];
+}
