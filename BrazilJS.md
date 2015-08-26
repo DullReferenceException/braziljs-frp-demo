@@ -176,8 +176,8 @@ I mistakenly speculated. Someone cracked a joke that he wanted to be at the
 "cool table" with Brendan Eich and the Mozilla posse, and Laurie retorted,
 we've got "substack" (the bearded guy) and Sebastian McKenzie here, so 
 _we are_ the cool table. "Substack" sounded familiar, but I couldn't recall 
-why. We talked about a variety of things, but at one point, ES6 (or is it  
-called JavaScript 2015 now?) was brought up. I was asked how I was using it in 
+why. We talked about a variety of things, but at one point, ES6 (or is it called JavaScript 2015 now?) was 
+brought up. I was asked how I was using it in 
 my project, and I said I was using the awesome Babel transpiler through a 
 Webpack plugin. Sebastian started making consolatory remarks about this and 
 asked Substack what he thought of Webpack. There was then a round of criticism
